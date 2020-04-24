@@ -1,0 +1,3 @@
+[tool.check-fixmes]
+annotations = ['TIMEBOMB']
+max-age = 1

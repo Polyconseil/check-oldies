@@ -1,0 +1,16 @@
+-e .[toml]
+
+# Testing
+pytest
+pytest-cov
+
+# Docs (pin Sphinx until sphinx_rtd is compatible with a more recent version)
+sphinx<2
+sphinx_rtd_theme
+
+# Quality
+check-manifest
+isort[pyproject]
+pylint
+pylint_strict_informational
+twine

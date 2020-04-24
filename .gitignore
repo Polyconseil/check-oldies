@@ -1,0 +1,30 @@
+# Temporary files
+.*.swp
+*.pyc
+*.pyo
+*.mo
+
+# Testing and co
+reports/
+private/
+public/
+/static/
+.tox
+.pytest_cache/
+# Build-related files
+docs/_build
+.coverage
+htmlcov
+.cache/
+*.egg-info
+*.egg
+build/
+dist/
+/reports/
+npm-debug.log*
+
+.DS_Store
+.idea
+env/
+venv*/
+.vscode/

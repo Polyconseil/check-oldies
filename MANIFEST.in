@@ -1,0 +1,13 @@
+include CHANGES.rst
+include LICENSE.txt
+include README.rst
+
+graft src/check_oldies
+
+prune docs
+prune tests
+exclude .pylintrc
+exclude .readthedocs.yaml
+exclude Makefile
+exclude pyproject.toml
+exclude requirements_dev.txt

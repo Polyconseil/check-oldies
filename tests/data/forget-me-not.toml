@@ -1,0 +1,12 @@
+warning-delay = 15
+
+# SMTP
+smtp.host = "localhost"
+
+# Recipients
+recipients.catch-all = "catch-all@example.com"
+recipients.list = [
+    "john.smith@example.com",
+]
+[recipients.aliases]
+js = "john.smith@example.com"

@@ -1,0 +1,38 @@
+[tool.check-fixmes]
+path = "."
+max-age = 180
+
+annotations = [
+    "fixme",
+    "todo",
+]
+whitelist = [
+    ".pylintrc",
+    "README.rst",
+    "setup.cfg",
+    "docs/*.rst",
+]
+
+
+[tool.check-branches]
+host-owner = 'Polyconseil'
+
+
+[tool.isort]
+multi_line_output = 3
+use_parentheses = true
+include_trailing_comma = true
+force_grid_wrap = 0
+combine_as_imports = true
+line_length = 88
+lines_after_imports = 2
+force_single_line = true
+force_sort_within_sections = true
+sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,TESTS,LOCALFOLDER"
+known_tests = ["tests"]
+skip = [
+    "docs/conf.py",
+]
+
+[tool.zest-releaser]
+create-wheel = true

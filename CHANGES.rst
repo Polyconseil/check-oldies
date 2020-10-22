@@ -1,4 +1,4 @@
-0.8.0 (Unreleased)
+0.8.0 (2020-10-22)
 ------------------
 
 First public release.

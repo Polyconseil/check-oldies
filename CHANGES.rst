@@ -1,4 +1,4 @@
-0.8.1 (unreleased)
+0.8.1 (2020-10-26)
 ------------------
 
 - Fix xUnit output that contained control characters when

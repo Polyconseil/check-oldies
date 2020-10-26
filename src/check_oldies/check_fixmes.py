@@ -84,6 +84,7 @@ def main():
 
     # Look for old annotations
     out = []
+    uncolorized_out = []
     all_annotations = sorted(
         annotations.get_annotations(config),
         key=lambda f: (f.assignee, -f.age, f.filename, f.line_no),
@@ -91,12 +92,14 @@ def main():
     for annotation in all_annotations:
         line = annotation_str(annotation)
         out.append(warn(line) if annotation.is_old else line)
+        uncolorized_out.append(line if annotation.is_old else line)
     has_old_annotations = any(ann for ann in all_annotations if ann.is_old)
 
     # Look for orphan FUTURE tags
     orphan_futures = annotations.get_orphan_futures(config)
     for orphan in orphan_futures:
         out.append(warn(orphan_str(orphan)))
+        uncolorized_out.append(orphan_str(orphan))
 
     out = os.linesep.join(out)
     if has_old_annotations or orphan_futures:
@@ -112,13 +115,14 @@ def main():
         print(out)
 
     if config.xunit_file:
+        uncolorized_out = os.linesep.join(uncolorized_out)
         xunit.create_xunit_file(
             os.path.abspath(config.xunit_file),
             suite_name="check-fixmes",
             case_name="fixmes",
             class_name="CheckFixmes",
             err_msg=err_msg,
-            stdout=out,
+            stdout=uncolorized_out,
             stderr="",
         )
 

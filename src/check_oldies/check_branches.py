@@ -71,11 +71,13 @@ def main():
     all_branches = branches.get_branches(config)
 
     out = []
+    uncolorized_out = []
     for branch in sorted(
         all_branches, key=lambda branch: (branch.author, -branch.age, branch.name)
     ):
         line = branch_str(branch)
         out.append(warn(line) if branch.is_old else line)
+        uncolorized_out.append(line if branch.is_old else line)
     has_old_branches = any(branch for branch in all_branches if branch.is_old)
 
     out = os.linesep.join(out)
@@ -89,13 +91,14 @@ def main():
         print(out)
 
     if config.xunit_file:
+        uncolorized_out = os.linesep.join(uncolorized_out)
         xunit.create_xunit_file(
             os.path.abspath(config.xunit_file),
             "check-branches",
             "branches",
             "CheckBranches",
             err_msg=err_msg,
-            stdout=out,
+            stdout=uncolorized_out,
             stderr="",
         )
 

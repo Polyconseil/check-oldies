@@ -1,7 +1,9 @@
 0.8.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix xUnit output that contained control characters when
+  ``check-fixmes`` or ``check-branches`` were not run with the
+  ``--no-color`` option.
 
 
 0.8.0 (2020-10-22)

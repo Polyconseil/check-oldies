@@ -1,4 +1,4 @@
-0.8.3 (unreleased)
+0.8.3 (2020-10-27)
 ------------------
 
 - Generate a wheel. For real. Or so I hope...

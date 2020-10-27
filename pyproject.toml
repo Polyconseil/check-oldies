@@ -33,6 +33,3 @@ known_tests = ["tests"]
 skip = [
     "docs/conf.py",
 ]
-
-[tool.zest-releaser]
-create-wheel = true

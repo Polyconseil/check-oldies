@@ -1,6 +1,9 @@
 0.8.2 (unreleased)
 ------------------
 
+- Fix generation of wheel on release. Only a tarball was released, now
+  a wheel should be released as well.
+
 - Fix compatibility with git < 2.7 in ``check-branches``.
 
 

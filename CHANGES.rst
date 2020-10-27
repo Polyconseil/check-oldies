@@ -1,4 +1,4 @@
-0.8.2 (unreleased)
+0.8.2 (2020-10-27)
 ------------------
 
 - Fix generation of wheel on release. Only a tarball was released, now

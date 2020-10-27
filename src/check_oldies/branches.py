@@ -79,7 +79,8 @@ class BranchInfo:
 
 def get_repository_name(path):
     """Extract the repository name from the origin remote."""
-    url = commands.get_output(("git", "remote", "get-url", "origin"), cwd=path)[0]
+    # When we can use git >= 2.7, we'll be able to use `git remote get-url origin`.
+    url = commands.get_output(("git", "config", "--get", "remote.origin.url"), cwd=path)[0]
     # It usually looks like "git@github.com:Polyconseil/check-oldies.git"
     # but could also look like "poly:check-fixmes.git" if you have an
     # "[url]" section with "insteadOf" in your Git configuration.

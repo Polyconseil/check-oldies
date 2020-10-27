@@ -1,7 +1,7 @@
 0.8.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix compatibility with git < 2.7 in ``check-branches``.
 
 
 0.8.1 (2020-10-26)

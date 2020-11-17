@@ -4,12 +4,14 @@ import os
 import pathlib
 import re
 import typing
+import urllib.parse
 
 from . import commands
 from . import githost
 
 
 TODAY = datetime.date.today()
+SSH_GIT_URL = re.compile('(?P<user>.+)@(?P<host>.+):(?P<path>.+)')
 
 
 @dataclasses.dataclass
@@ -43,13 +45,18 @@ class Config:
     calm_branches: typing.Sequence = ("gh-pages", "master", "prod", "maint(enance)?/.*")
     ignore_branches_without_pull_request: bool = False
 
-    host_owner: str = None
     host_url: str = "https://github.com/{owner}/{repo}/tree/{branch}"
     host_api_access: dict = None
+
+    # Cannot be configured, but is automatically filled in instead. Default value is irrelevant and only here to
+    # initialize the field.
+    host_owner: str = dataclasses.field(default=None, init=False)
 
     def __post_init__(self):
         if self.host_api_access:
             self.host_api_access = GitHostApiAccessInfo(**self.host_api_access)
+        if not self.host_owner:
+            self.host_owner, _repo_name = get_repository_info(self.path)
 
     def ignore_branch(self, branch):
         for calm_branch_regexp in self.calm_branches:
@@ -77,20 +84,29 @@ class BranchInfo:
         return details
 
 
-def get_repository_name(path):
-    """Extract the repository name from the origin remote."""
-    # When we can use git >= 2.7, we'll be able to use `git remote get-url origin`.
-    url = commands.get_output(("git", "config", "--get", "remote.origin.url"), cwd=path)[0]
+def get_repository_info(path):
+    """Extract the repository owner and name from the origin remote."""
+    # Compared to "git config --get remote.origin.url" or "git remote get-url origin", this handles aliases defined in
+    # git config.
+    remote_url = commands.get_output(("git", "ls-remote", "--get-url"), cwd=path)[0]
     # It usually looks like "git@github.com:Polyconseil/check-oldies.git"
     # but could also look like "poly:check-fixmes.git" if you have an
     # "[url]" section with "insteadOf" in your Git configuration.
-    if url.endswith(".git"):
-        url = url[:-4]
-    return url.rsplit("/", 1)[-1].rsplit(":", 1)[-1]
+    if remote_url.endswith(".git"):
+        remote_url = remote_url[:-4]
+    parsed = urllib.parse.urlparse(remote_url)
+    if parsed.scheme in ('http', 'https'):
+        path = parsed.path.lstrip('/')
+        return path.split('/', 1)
+    ssh_match = SSH_GIT_URL.match(remote_url)
+    if ssh_match:
+        path = ssh_match.group('path')
+        return path.split('/', 1)
+    raise ValueError(f"Could not parse remote origin and determine the Git host: '{remote_url}'")
 
 
 def get_branches(config: Config):
-    repo = get_repository_name(config.path)
+    _owner, repo_name = get_repository_info(config.path)
 
     branches = []
     for branch in commands.get_output(("git", "branch", "--remotes"), cwd=config.path):
@@ -108,10 +124,10 @@ def get_branches(config: Config):
         email, date, *_rest = output.split(" ")
         date = datetime.date(*[int(s) for s in date.split("-")])
         age = (TODAY - date).days
-        url = config.host_url.format(owner=config.host_owner, repo=repo, branch=branch)
+        url = config.host_url.format(owner=config.host_owner, repo=repo_name, branch=branch)
         branches.append(
             BranchInfo(
-                repo=repo,
+                repo=repo_name,
                 name=branch,
                 url=url,
                 author=email,
@@ -126,7 +142,7 @@ def get_branches(config: Config):
     if config.host_api_access:
         pr_getter = githost.PullRequestGetter(config.host_owner, config.host_api_access)
         for branch in branches:
-            branch.pull_request = pr_getter.get_pull_request(repo, branch.name)
+            branch.pull_request = pr_getter.get_pull_request(repo_name, branch.name)
 
     return [
         branch

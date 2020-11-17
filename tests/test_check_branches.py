@@ -29,6 +29,25 @@ def intercept_commands(replacements):
         yield
 
 
+def test_get_repository_info():
+    valid_urls = [
+        'https://github.com/TestOrg/project_name',
+        'git@github.com:TestOrg/project_name',
+        'git@github.com:TestOrg/project_name.git',
+    ]
+
+    for url in valid_urls:
+        with mock.patch('check_oldies.commands.get_output', return_value=[url]):
+            owner, repo_name = branches.get_repository_info('.')
+        assert owner == 'TestOrg', url
+        assert repo_name == 'project_name', url
+
+    # Unsupported format
+    with mock.patch('check_oldies.commands.get_output', return_value=['ftp://github.com/TestOrg/project_name']):
+        with pytest.raises(ValueError):
+            owner, repo_name = branches.get_repository_info('.')
+
+
 def test_output_fresh_branches(capfd):  # capfd is a pytest fixture
     config = branches.Config(
         path=base.TEST_DIR_PATH.parent,
@@ -50,9 +69,11 @@ def test_output_fresh_branches(capfd):  # capfd is a pytest fixture
 
 
 def test_output_old_branches(capfd):  # capfd is a pytest fixture
+    with pytest.raises(TypeError):
+        config = branches.Config(host_owner='Polyconseil')
+
     config = branches.Config(
         path=base.TEST_DIR_PATH.parent,
-        host_owner="Polyconseil",
         colorize_errors=False,
     )
 

@@ -165,7 +165,6 @@ It looks like this:
 
     host-api-access.platform = 'github'
     host-api-access.auth-token-file = '~/.config/github_auth_token'
-    host-owner = 'Polyconseil'
 
 See below for the possible keys in this table. Currently, only GitHub
 is supported.
@@ -227,22 +226,12 @@ API client to use. For now, only ``github`` is supported.
 | Example: ``host-api-access.platform = "github"``.
 
 
-``host-owner``
-..............
-
-The owner of the repository. The value is injected into ``host-url``
-below to build the URL of each branch of the repository.
-
-| Type: string.
-| Default: ``None``.
-| Example: ``host-owner = "YourCompany"``.
-
-
 ``host-url``
 ............
 
 The pattern to be used to build the URL of each branch of the
-repository. The default value is tailored for GitHub.
+repository. The default value is tailored for GitHub. The ``{owner}``
+value is extracted from the remote origin's URL.
 
 | Type: string.
 | Default: ``"https://github.com/{owner}/{repo}/tree/{branch}"``.

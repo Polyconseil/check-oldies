@@ -14,10 +14,6 @@ whitelist = [
 ]
 
 
-[tool.check-branches]
-host-owner = 'Polyconseil'
-
-
 [tool.isort]
 multi_line_output = 3
 use_parentheses = true

@@ -1,7 +1,10 @@
 0.8.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Automatically detect the appropriate ``host_owner`` if undefined, in
+  ``check-branches``.
+- |backward-incompatible| **check-branches**: Drop ``host_owner`` option in the configuration file. You should remove
+  this option, otherwise an error will occur while reading the configuration file.
 
 
 0.8.3 (2020-10-27)
@@ -37,3 +40,9 @@ First public release.
 ------------------
 
 First apparition in a private tool.
+
+
+.. role:: raw-html(raw)
+.. |backward-incompatible| raw:: html
+
+    <span style="background-color: #ffffbc; padding: 0.3em; font-weight: bold;">backward incompatible</span>

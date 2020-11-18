@@ -1,4 +1,4 @@
-0.8.4 (unreleased)
+0.8.4 (2020-11-18)
 ------------------
 
 - Automatically detect the appropriate ``host_owner`` if undefined, in

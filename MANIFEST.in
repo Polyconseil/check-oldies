@@ -1,3 +1,5 @@
+global-exclude *.py[cod]
+
 include CHANGES.rst
 include LICENSE.txt
 include README.rst

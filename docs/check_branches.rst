@@ -167,11 +167,11 @@ It looks like this:
     host-api-access.auth-token-file = '~/.config/github_auth_token'
 
 See below for the possible keys in this table. Currently, only GitHub
-is supported.
+and Gitlab are supported.
 
-If your repository is hosted on GitHub, you only need to configure one
-of the authentication token-related options. The default value of the
-other options are tailored for GitHub.
+If your repository is hosted on GitHub or Gitlab, you only need to
+configure one of the authentication token-related options. The
+default value of the other options are tailored for GitHub.
 
 If you do *not* have access to the API of a Git hosting platform,
 don't configure anything in ``host-api-access``.
@@ -219,11 +219,12 @@ An authentication token must be set with this option or
 ............................
 
 The name of the Git hosting platform. This is used to determine the
-API client to use. For now, only ``github`` is supported.
+API client to use. For now, only ``github`` and ``gitlab`` are
+supported.
 
 | Type: string.
 | Default: ``"github"``.
-| Example: ``host-api-access.platform = "github"``.
+| Example: ``host-api-access.platform = "gitlab"``.
 
 
 ``host-url``

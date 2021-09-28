@@ -12,12 +12,12 @@ from . import githost
 
 TODAY = datetime.date.today()
 SSH_GIT_URL = re.compile('(?P<user>.+)@(?P<host>.+):(?P<path>.+)')
+DEFAULT_API_URL = "https://api.github.com"
 
 
 @dataclasses.dataclass
 class GitHostApiAccessInfo:
-    platform: str = "github"
-    api_base_url: str = "https://api.github.com"
+    api_base_url: str = DEFAULT_API_URL
     auth_token_file: str = None
     auth_token_env_var: str = None
 
@@ -36,6 +36,7 @@ class GitHostApiAccessInfo:
 
 @dataclasses.dataclass
 class Config:
+    platform: str = None
     path: str = "."
     max_age: int = 90
 
@@ -45,24 +46,36 @@ class Config:
     calm_branches: typing.Sequence = ("gh-pages", "master", "prod", "maint(enance)?/.*")
     ignore_branches_without_pull_request: bool = False
 
-    host_url: str = "https://github.com/{owner}/{repo}/tree/{branch}"
     host_api_access: dict = None
 
     # Cannot be configured, but is automatically filled in instead. Default value is irrelevant and only here to
     # initialize the field.
+    host: str = dataclasses.field(default=None, init=False)
     host_owner: str = dataclasses.field(default=None, init=False)
+    repo_name: str = dataclasses.field(default=None, init=False)
 
     def __post_init__(self):
         if self.host_api_access:
             self.host_api_access = GitHostApiAccessInfo(**self.host_api_access)
-        if not self.host_owner:
-            self.host_owner, _repo_name = get_repository_info(self.path)
+
+        self.host, self.host_owner, self.repo_name = get_repository_info(self.path)
+
+        if not self.platform:
+            if "gitlab" in self.host.lower():
+                self.platform = "gitlab"
+                if self.host_api_access and self.host_api_access.api_base_url == DEFAULT_API_URL:
+                    self.host_api_access.api_base_url = f"https://{self.host}/api/v4"
+            else:
+                self.platform = "github"  # non-breaking change: keep the previous default value
 
     def ignore_branch(self, branch):
         for calm_branch_regexp in self.calm_branches:
             if re.match(calm_branch_regexp, branch):
                 return True
         return False
+
+    def get_branch_url(self, branch):
+        return f"https://{self.host}/{self.host_owner}/{self.repo_name}/tree/{branch}"
 
 
 @dataclasses.dataclass
@@ -97,17 +110,17 @@ def get_repository_info(path):
     parsed = urllib.parse.urlparse(remote_url)
     if parsed.scheme in ('http', 'https'):
         path = parsed.path.lstrip('/')
-        return path.split('/', 1)
+        host_owner, repo_name = path.split('/', 1)
+        return parsed.netloc, host_owner, repo_name
     ssh_match = SSH_GIT_URL.match(remote_url)
     if ssh_match:
         path = ssh_match.group('path')
-        return path.split('/', 1)
+        host_owner, repo_name = path.split('/', 1)
+        return ssh_match.group('host'), host_owner, repo_name
     raise ValueError(f"Could not parse remote origin and determine the Git host: '{remote_url}'")
 
 
 def get_branches(config: Config):
-    _owner, repo_name = get_repository_info(config.path)
-
     branches = []
     for branch in commands.get_output(("git", "branch", "--remotes"), cwd=config.path):
         branch = branch.strip()
@@ -124,12 +137,11 @@ def get_branches(config: Config):
         email, date, *_rest = output.split(" ")
         date = datetime.date(*[int(s) for s in date.split("-")])
         age = (TODAY - date).days
-        url = config.host_url.format(owner=config.host_owner, repo=repo_name, branch=branch)
         branches.append(
             BranchInfo(
-                repo=repo_name,
+                repo=config.repo_name,
                 name=branch,
-                url=url,
+                url=config.get_branch_url(branch=branch),
                 author=email,
                 age=age,
                 is_old=age > config.max_age,
@@ -140,9 +152,9 @@ def get_branches(config: Config):
         return ()
 
     if config.host_api_access:
-        pr_getter = githost.PullRequestGetter(config.host_owner, config.host_api_access)
+        pr_getter = githost.PullRequestGetter(config.platform, config.host_owner, config.host_api_access)
         for branch in branches:
-            branch.pull_request = pr_getter.get_pull_request(repo_name, branch.name)
+            branch.pull_request = pr_getter.get_pull_request(config.repo_name, branch.name)
 
     return [
         branch

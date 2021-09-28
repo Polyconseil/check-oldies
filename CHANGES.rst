@@ -1,7 +1,7 @@
 0.8.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add Gitlab support.
 
 
 0.8.5 (2021-10-08)

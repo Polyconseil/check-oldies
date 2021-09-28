@@ -32,20 +32,22 @@ def intercept_commands(replacements):
 def test_get_repository_info():
     valid_urls = [
         'https://github.com/TestOrg/project_name',
+        'https://github.com/TestOrg/project_name.git',
         'git@github.com:TestOrg/project_name',
         'git@github.com:TestOrg/project_name.git',
     ]
 
     for url in valid_urls:
         with mock.patch('check_oldies.commands.get_output', return_value=[url]):
-            owner, repo_name = branches.get_repository_info('.')
+            host, owner, repo_name = branches.get_repository_info('.')
+        assert host == 'github.com', url
         assert owner == 'TestOrg', url
         assert repo_name == 'project_name', url
 
     # Unsupported format
     with mock.patch('check_oldies.commands.get_output', return_value=['ftp://github.com/TestOrg/project_name']):
         with pytest.raises(ValueError):
-            owner, repo_name = branches.get_repository_info('.')
+            host, owner, repo_name = branches.get_repository_info('.')
 
 
 def test_output_fresh_branches(capfd):  # capfd is a pytest fixture

@@ -1,7 +1,8 @@
 0.8.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add ``ignore_orphans_annotations`` config option.
+This option ignore orphan future tags check on ignored annotations.
 
 
 0.8.4 (2020-11-18)

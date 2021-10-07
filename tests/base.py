@@ -10,7 +10,7 @@ TEST_DIR_PATH = pathlib.Path(os.path.dirname(__file__))
 # tests.
 TESTING_ANNOTATIONS = ["TIMEBOMB"]
 TESTING_FUTURE_TAG = r"FEWTURE-[-[:alnum:]\._]+?"
-
+TESTING_IGNORED_ORPHANS_ANNOTATIONS = ["NOFIX"]
 
 # We need to force the age of each line (i.e. the datetime of the
 # latest commit that touched each line) that we want to display,

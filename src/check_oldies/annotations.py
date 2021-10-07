@@ -23,7 +23,8 @@ class Config:
     colorize_errors: bool = True
     xunit_file: str = None
 
-    annotations: typing.Sequence = ("todo", "fixme")  # no-check-fixmes
+    annotations: typing.Sequence = ("todo", "fixme", )  # no-check-fixmes
+    ignored_orphans_annotations: typing.Sequence = ("wontfix", "xxx")  # annotation which won't trigger orphans checks
     assignee_regex: str = r"(?:{annotation_regex})\s*\((?P<assignee>[\w\._-]+)"
     future_tag_regex: str = r"FUTURE-[-[:alnum:]\._]+?"  # no-check-fixmes
 
@@ -32,6 +33,10 @@ class Config:
     @property
     def annotation_regex(self):
         return "|".join(self.annotations).lower()
+
+    @property
+    def ignored_orphans_annotations_regex(self):
+        return "|".join(self.ignored_orphans_annotations).lower()
 
     @property
     def _annotation_with_boundaries_regex(self):
@@ -261,7 +266,9 @@ def get_orphan_futures(config):
     line with an annotation.
     """
     known_tags = get_known_future_tags(
-        config.path, config.annotation_regex, config.future_tag_regex, config.whitelist,
+        config.path,
+        fr'{config.ignored_orphans_annotations_regex}|{config.annotation_regex}',
+        config.future_tag_regex, config.whitelist,
     )
     futures = get_all_futures(config.path, config.future_tag_regex, config.whitelist)
     orphans = []

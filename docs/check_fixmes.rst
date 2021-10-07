@@ -301,6 +301,18 @@ The extended regular expression to use to detect FUTURE tags.
 | Default: ``"FUTURE-[-[:alnum:]\._]+?"``.
 | Example: ``future-tag-regex = "HEREAFTER-[-[:alnum:]\._]+?"``.
 
+.. _conf_ignored_orphans_annotations:
+
+``ignored_orphans_annotations``
+...............
+
+The list of annotations which will not trigger orphan FUTURE tags checks.
+Note that **check-fixmes** is case insensitive:
+by default, both "wontfix", "WONTFIX" will be ignored.
+
+| Type: list.
+| Default: ``["wontfix", "xxx"]`` (case insensitive).
+| Example: ``ignored_annotations = ["wontfix", "nofix"]``.
 
 .. _conf_max_age:
 

@@ -1,4 +1,4 @@
-0.8.5 (unreleased)
+0.8.5 (2021-10-08)
 ------------------
 
 - Add ``ignore_orphans_annotations`` config option.

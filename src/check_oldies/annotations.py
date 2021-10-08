@@ -40,7 +40,8 @@ class Config:
 
     @property
     def _annotation_with_boundaries_regex(self):
-        return r"\b%s\b" % r"\b|\b".join(self.annotations).lower()
+        annotation_regex = r'\b|\b'.join(self.annotations).lower()
+        return fr'\b{annotation_regex}\b'
 
     @property
     def py_annotation_regex(self):
@@ -50,7 +51,7 @@ class Config:
             return self._py_annotation_regex
         # Only accept tags if preceded by #, <, {, some space, /, * or line start
         self._py_annotation_regex = re.compile(
-            r"((?<=#|\s|/|\*|<|{)|^)(%s)" % self._annotation_with_boundaries_regex,
+            fr"((?<=#|\s|/|\*|<|{{)|^)({self._annotation_with_boundaries_regex})",
             re.IGNORECASE | re.UNICODE,
         )
         return self._py_annotation_regex
@@ -106,7 +107,7 @@ def get_annotation_candidates(directory, annotation_regex, whitelist):
             "--",
             ".",
         ]
-        + [":(exclude)%s" % glob for glob in whitelist],
+        + [f":(exclude){glob}" for glob in whitelist],
         cwd=directory,
         valid_return_codes=(0, 1),  # 1 means that no files were found
     )
@@ -117,7 +118,7 @@ def get_line_blame(filename, line, cwd):
     touched this line.
     """
     infos = commands.get_output(
-        ["git", "blame", "-L %s,%s" % (line, line), "--porcelain", "--", filename],
+        ["git", "blame", f"-L {line},{line}", "--porcelain", "--", filename],
         cwd=cwd,
     )
 
@@ -221,7 +222,7 @@ def get_all_futures(directory, future_tag_regex, whitelist):
             "-e",
             IGNORE_PRAGMA,
         ]
-        grep.extend([":(exclude)%s" % glob for glob in whitelist])
+        grep.extend([f":(exclude){glob}" for glob in whitelist])
         lines = commands.get_output(
             grep,
             cwd=directory,
@@ -243,7 +244,7 @@ def get_all_futures(directory, future_tag_regex, whitelist):
             "--",  # needed on old versions...
             ".",  # ... of git
         ]
-        grep.extend([":(exclude)%s" % glob for glob in whitelist])
+        grep.extend([f":(exclude){glob}" for glob in whitelist])
         sed = f'sed --regexp-extended "s/(.*?):.*?({future_tag_regex}).*?/\\1:\\2/g"'
         lines = commands.get_pipe_command_output(
             grep,

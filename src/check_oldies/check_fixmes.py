@@ -9,22 +9,16 @@ from . import xunit
 
 def annotation_str(annotation):
     return (
-        "{assignee: <15} - {age_days: >4} days - "
-        "{filename}:{line_no}: {line_content}"
-    ).format(
-        assignee=annotation.assignee[:15],
-        age_days=annotation.age,
-        filename=annotation.filename,
-        line_no=annotation.line_no,
-        line_content=annotation.line_content.strip(),
+        f"{annotation.assignee: <15} - {annotation.age: >4} days - "
+        f"{annotation.filename}:{annotation.line_no}: {annotation.line_content.strip()}"
     )
 
 
 def orphan_str(orphan):
     return (
-        "{author: <15} -   ORPHAN  - "
-        "{orphan.path}:{orphan.line_no}: Unknown tag {orphan.tag}"
-    ).format(author=orphan.author[:15], orphan=orphan)
+        f"{orphan.author: <15} -   ORPHAN  - "
+        f"{orphan.path}:{orphan.line_no}: Unknown tag {orphan.tag}"
+    )
 
 
 def get_parser():

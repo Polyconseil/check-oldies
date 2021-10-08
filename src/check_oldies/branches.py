@@ -26,7 +26,7 @@ class GitHostApiAccessInfo:
 
     def get_auth_token(self):
         if self.auth_token_file:
-            return pathlib.Path(self.auth_token_file).expanduser().read_text().strip()
+            return pathlib.Path(self.auth_token_file).expanduser().read_text(encoding='utf-8').strip()
         if self.auth_token_env_var:
             return os.environ[self.auth_token_env_var]
         raise ValueError(

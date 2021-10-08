@@ -53,5 +53,5 @@ class GitHubApi:
             "Content-Type": "application/json",
         }
         request = urllib.request.Request(url, headers=headers)
-        response = urllib.request.urlopen(request)
+        response = urllib.request.urlopen(request)  # pylint: disable=consider-using-with
         return json.loads(response.read())

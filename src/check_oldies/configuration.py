@@ -42,7 +42,7 @@ def read_from_configuration_file(path, tool_name):
     try:
         conf = toml.load(path)
     except Exception as exc:  # pylint: disable=broad-except # pragma: no cover
-        sys.exit("Error reading {}: {}".format(path, exc.args[-1]))
+        sys.exit(f"Error reading {path}: {exc.args[-1]}")
 
     if tool_name:
         try:

@@ -70,7 +70,7 @@ def test_output_fresh_branches(capfd):  # capfd is a pytest fixture
 
 def test_output_old_branches(capfd):  # capfd is a pytest fixture
     with pytest.raises(TypeError):
-        config = branches.Config(host_owner='Polyconseil')
+        config = branches.Config(host_owner='Polyconseil')  # pylint: disable=unexpected-keyword-arg
 
     config = branches.Config(
         path=base.TEST_DIR_PATH.parent,

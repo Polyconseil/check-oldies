@@ -36,7 +36,8 @@ def get_pipe_command_output(base_cmd_list, piped_to, cwd=None, valid_return_code
         )
         pipefile.write(os.linesep.join(command_output))
         pipefile.close()
-        lines = open(pipefile_path).read().split(os.linesep)
+        with open(pipefile_path, encoding='utf-8') as fp:
+            lines = fp.read().split(os.linesep)
         return list(filter(bool, lines))
     finally:
         if not pipefile.closed:  # pragma: no cover

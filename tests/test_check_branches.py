@@ -33,6 +33,7 @@ def test_get_repository_info():
     valid_urls = [
         'https://github.com/TestOrg/project_name',
         'https://github.com/TestOrg/project_name.git',
+        'ssh://git@github.com/TestOrg/project_name',
         'git@github.com:TestOrg/project_name',
         'git@github.com:TestOrg/project_name.git',
     ]

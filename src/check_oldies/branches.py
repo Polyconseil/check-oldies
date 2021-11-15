@@ -108,10 +108,12 @@ def get_repository_info(path):
     if remote_url.endswith(".git"):
         remote_url = remote_url[:-4]
     parsed = urllib.parse.urlparse(remote_url)
-    if parsed.scheme in ('http', 'https'):
+    if parsed.scheme in ('http', 'https', 'ssh'):
         path = parsed.path.lstrip('/')
         host_owner, repo_name = path.split('/', 1)
-        return parsed.netloc, host_owner, repo_name
+        # Drop "git@" prefix with ssh scheme
+        host = parsed.netloc.split('@')[-1] if parsed.scheme == "ssh" else parsed.netloc
+        return host, host_owner, repo_name
     ssh_match = SSH_GIT_URL.match(remote_url)
     if ssh_match:
         path = ssh_match.group('path')

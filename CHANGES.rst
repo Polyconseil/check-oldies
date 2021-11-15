@@ -1,4 +1,4 @@
-0.8.7 (unreleased)
+0.8.7 (2021-11-15)
 ------------------
 
 - Add support for ssh URL with protocol (e.g. ssh://git@github.com/TestOrg/project_name)

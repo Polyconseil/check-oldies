@@ -1,7 +1,7 @@
 0.8.8 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- |backward-incompatible| Drop support of Python 3.6.
 
 
 0.8.7 (2021-11-15)

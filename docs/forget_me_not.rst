@@ -245,3 +245,17 @@ The port to use when contacting the SMTP host to send e-mail reports.
 | Default: ``0`` (uses OS default behaviour).
 | Example: ``smtp.port = 12345``.
 
+``smtp.user``
+.............
+
+The user to use when contacting the SMTP host to send e-mail reports.
+
+| Type: string.
+| Example: ``smtp.user = "USERNAME"``.
+
+``smtp.password``
+.............
+
+The password to use when contacting the SMTP host to send e-mail reports.
+| Type: string.
+| Example: ``smtp.password = "SECRET"``.

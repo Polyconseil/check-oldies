@@ -49,9 +49,15 @@ class RecipientConfig:
 class SmtpConfig:
     host: str
     port: int = 0  # use OS default behaviour
+    user: typing.Optional[str] = None
+    password: typing.Optional[str] = None
 
     def make_connection(self):
-        return smtplib.SMTP(self.host, port=self.port)
+        smtp = smtplib.SMTP(self.host, port=self.port)
+        if self.user and self.password:
+            smtp.starttls()
+            smtp.login(self.user, self.password)
+        return smtp
 
 
 @dataclasses.dataclass

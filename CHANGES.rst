@@ -1,6 +1,7 @@
 0.8.8 (unreleased)
 ------------------
 
+- Add SMTP authentication
 - |backward-incompatible| Drop support of Python 3.6.
 
 

@@ -74,7 +74,7 @@ def main():
     if config.colorize_errors:
         warn = "\033[91m{}\033[0m".format
     else:
-        warn = lambda text: text
+        warn = lambda text: text  # pylint: disable=unnecessary-lambda-assignment
 
     # Look for old annotations
     out = []

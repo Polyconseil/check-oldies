@@ -1,4 +1,4 @@
-0.8.8 (unreleased)
+0.8.8 (2023-01-11)
 ------------------
 
 - Add SMTP authentication

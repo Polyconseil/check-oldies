@@ -4,8 +4,8 @@
 pytest
 pytest-cov
 
-# Docs (pin Sphinx until sphinx_rtd is compatible with a more recent version)
-sphinx<2
+# Docs
+sphinx
 sphinx_rtd_theme
 
 # Quality

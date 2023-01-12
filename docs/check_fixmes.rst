@@ -304,7 +304,7 @@ The extended regular expression to use to detect FUTURE tags.
 .. _conf_ignored_orphans_annotations:
 
 ``ignored_orphans_annotations``
-...............
+...............................
 
 The list of annotations which will not trigger orphan FUTURE tags checks.
 Note that **check-fixmes** is case insensitive:

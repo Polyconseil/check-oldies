@@ -51,7 +51,7 @@ def test_xunit_failure(tmp_path):  # tmp_path is a pytest fixture
     expected = (
         '<testsuite name="suite name" tests="1" errors="0" failures="1">'
         '<testcase classname="class name" name="case name">'
-        '<failure message="There are errors." />'
+        '<failure message="There are errors.">This is stdout\nThis is stderr</failure>'
         "<system-out>This is stdout</system-out>"
         "<system-err>This is stderr</system-err>"
         "</testcase>"

@@ -30,7 +30,9 @@ def create_xunit_file(
         suite, "testcase", {"classname": class_name, "name": case_name}
     )
     if err_msg:
-        ElementTree.SubElement(case, "failure", {"message": err_msg})
+        failure = ElementTree.SubElement(case, 'failure', {'message': err_msg})
+        failure.text = f"{stdout}\n{stderr}" if stdout and stderr else stdout or stderr
+
     system_out = ElementTree.SubElement(case, "system-out")
     system_out.text = stdout
 

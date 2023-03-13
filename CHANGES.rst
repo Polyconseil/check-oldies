@@ -1,7 +1,7 @@
-0.8.9 (unreleased)
+0.8.9 (2023-03-13)
 ------------------
 
-- Nothing changed yet.
+- Adapt xunit syntax for gitlab reports
 
 
 0.8.8 (2023-01-11)

@@ -43,7 +43,7 @@ class Config:
     colorize_errors: bool = True
     xunit_file: str = None
 
-    calm_branches: typing.Sequence = ("gh-pages", "master", "prod", "maint(enance)?/.*")
+    calm_branches: typing.Sequence = ("gh-pages", "master", "main", "prod", "maint(enance)?/.*")
     ignore_branches_without_pull_request: bool = False
 
     host_api_access: dict = None

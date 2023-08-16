@@ -1,7 +1,7 @@
-0.8.10 (unreleased)
--------------------
+0.8.10 (2023-08-16)
+------------------
 
-- Nothing changed yet.
+- Add main branch to calm branches
 
 
 0.8.9 (2023-03-13)

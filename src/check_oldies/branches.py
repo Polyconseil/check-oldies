@@ -8,6 +8,7 @@ import urllib.parse
 
 from . import commands
 from . import githost
+from . import output
 
 
 TODAY = datetime.date.today()
@@ -40,8 +41,8 @@ class Config:
     path: str = "."
     max_age: int = 90
 
+    output_format: output.OutputFormat = output.OutputFormat.TEXT
     colorize_errors: bool = True
-    xunit_file: str = None
 
     calm_branches: typing.Sequence = ("gh-pages", "master", "main", "prod", "maint(enance)?/.*")
     ignore_branches_without_pull_request: bool = False
@@ -89,12 +90,21 @@ class BranchInfo:
     pull_request: githost.PullRequestInfo = None
 
     @property
+    def must_warn(self):
+        return self.is_old
+
+    @property
     def name_and_details(self):
         details = f"{self.name} ({self.url})"
         if self.pull_request:
             pr = self.pull_request
             details += f", linked to {pr.state} PR/MR #{pr.number} ({pr.url})"
         return details
+
+    def to_text(self):
+        return (
+            f"{self.author[:30]: <30} - {self.age: >4} days - {self.name_and_details}"
+        )
 
 
 def get_repository_info(path):
@@ -131,12 +141,12 @@ def get_branches(config: Config):
         branch = branch.strip()[len("origin/") :]
         if config.ignore_branch(branch) or "->" in branch:
             continue
-        output = commands.get_output(
+        out = commands.get_output(
             ("git", "log", f"origin/{branch}", "-1", "--format=%ae %ci"),
             cwd=config.path,
         )[0]
         # line looks like "john.smith@mail.test 2018-12-19 14:18:52 +0100"
-        email, date, *_rest = output.split(" ")
+        email, date, *_rest = out.split(" ")
         date = datetime.date(*[int(s) for s in date.split("-")])
         age = (TODAY - date).days
         branches.append(
@@ -151,7 +161,7 @@ def get_branches(config: Config):
         )
 
     if not branches:
-        return ()
+        return []
 
     if config.host_api_access:
         pr_getter = githost.PullRequestGetter(config.platform, config.host_owner, config.host_api_access)

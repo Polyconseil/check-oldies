@@ -8,6 +8,7 @@ import typing
 import pkg_resources
 
 from . import commands
+from . import output
 
 
 IGNORE_PRAGMA = "no-check-fixmes"
@@ -20,8 +21,8 @@ class Config:
     path: str = "."
     max_age: int = 180
 
+    output_format: output.OutputFormat = output.OutputFormat.TEXT
     colorize_errors: bool = True
-    xunit_file: str = None
 
     annotations: typing.Sequence = ("todo", "fixme", )  # no-check-fixmes
     ignored_orphans_annotations: typing.Sequence = ("wontfix", "xxx")  # annotation which won't trigger orphans checks
@@ -79,6 +80,16 @@ class Annotation:
     assignee: str = None
     is_old: bool = None
 
+    @property
+    def must_warn(self):
+        return self.is_old
+
+    def to_text(self):
+        return (
+            f"{self.assignee: <15} - {self.age: >4} days - "
+            f"{self.filename}:{self.line_no}: {self.line_content.strip()}"
+        )
+
 
 @dataclasses.dataclass
 class FutureTag:
@@ -86,6 +97,14 @@ class FutureTag:
     line_no: int
     tag: str
     author: str = None
+
+    must_warn = True
+
+    def to_text(self):
+        return (
+            f"{self.author: <15} -   ORPHAN  - "
+            f"{self.path}:{self.line_no}: Unknown tag {self.tag}"
+        )
 
 
 def get_annotation_candidates(directory, annotation_regex, whitelist):
@@ -151,7 +170,7 @@ def get_annotations(config: Config):
         config.path, config.annotation_regex, config.whitelist
     ):
         filename, line_no, line_content = candidate.split(":", 2)
-        # FIXME (dbaty, 2020-10-21): it should be possible to apply
+        # FIXME (dbaty, 2024-03-28): it should be possible to apply
         # the right regex (with boundaries) directly in git grep.
         if config.py_annotation_regex.search(line_content):
             annotations.append(Annotation(filename, int(line_no), line_content))

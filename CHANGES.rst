@@ -1,6 +1,16 @@
 1.0.0 (unreleased)
 ------------------
 
+- |backward-incompatible| Remove ``--xunit-file`` argument from all
+  commands. It can be replaced by a new ``--format=xunit`` argument
+  and redirecting the standard output to a file, like this::
+
+      $ check-fixmes --format=xunit > xunit.xml
+
+  This change is needed to properly introduce the ``--format``
+  argument that controls the formatting output, which is now directed
+  to the standard output.
+
 - |backward-incompatible| A new **check-future-tags** command is
   introduced that reports orphan future tags. **check-fixmes** does
   **not** report those tags anymore, it only reports outdated FIXME's.

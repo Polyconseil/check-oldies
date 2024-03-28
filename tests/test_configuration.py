@@ -4,6 +4,7 @@ import pytest
 
 from check_oldies import annotations
 from check_oldies import configuration
+from check_oldies import output
 
 from . import base
 
@@ -26,7 +27,7 @@ def test_get_config_from_config_file(arg_parser):
     assert config.path == str(base.TEST_DIR_PATH)
     assert config.max_age == 180
     assert config.colorize_errors
-    assert config.xunit_file is None
+    assert config.output_format == output.OutputFormat.TEXT
     assert config.annotations == ["fixme", "todo"]
 
 

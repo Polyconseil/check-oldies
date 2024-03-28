@@ -26,20 +26,20 @@ Usage
 .. code-block:: console
 
     $ check-branches --help
-    usage: check-branches [-h] [--conf CONF] [--max-age MAX_AGE] [--no-color] [--xunit-file XUNIT_FILE] [path]
+    usage: check-branches [-h] [--conf CONF] [--format {text,xunit}] [--max-age MAX_AGE] [--no-color] [path]
 
     Check your code for unattended branches
 
     positional arguments:
       path                  Git-managed path where search should happen. Defaults to the working directory.
 
-    optional arguments:
+    options:
       -h, --help            show this help message and exit
       --conf CONF           Path of the configuration file. Defaults to pyproject.toml if it exists.
+      --format {text,xunit}
+                            Output format. Defaults to human-readable text (one result per line).
       --max-age MAX_AGE     Maximum age in days allowed for a branch, errors otherwise. Defaults to 90.
       --no-color            Do not colorize errors. Defaults to colorizing errors in red.
-      --xunit-file XUNIT_FILE
-                            Path of the xUnit report file to write. Defaults to no xUnit output.
 
 
 Tip
@@ -253,13 +253,11 @@ By default, errors (old branches) appear in red. Set this option to
 | Example: ``colorize-errors = false``.
 
 
-``xunit-file`` (overridable via the command line)
-.................................................
+``format`` (overridable via the command line)
+.............................................
 
-The path to the xUnit report file to generate. **check-branches**
-gracefully creates parent directories of the file if they do not
-exist.
+The output format.
 
-| Type: string (a path).
-| Default: none (no xUnit file is generated).
-| Example: ``xunit-file = "reports/xunit.xml"``.
+| Type: string, one of : ``text`` or ``xunit``.
+| Default: ``text``
+| Example: ``format = "xunit"``.

@@ -7,6 +7,7 @@ import pytest
 
 from check_oldies import annotations
 from check_oldies import check_fixmes
+from check_oldies import output
 
 from . import base
 
@@ -56,16 +57,16 @@ def test_output_when_no_annotations(capfd: pytest.CaptureFixture):
 
 
 
-def test_xunit_file_generation(tmp_path):  # tmp_path is a pytest fixture
-    xunit_path = tmp_path / "xunit.xml"
+def test_xunit_file_generation(capfd: pytest.CaptureFixture):
     config = annotations.Config(
         path=base.TEST_DIR_PATH / "data/project2",
-        xunit_file=xunit_path,
+        output_format=output.OutputFormat.XUNIT,
     )
 
     with mock.patch("check_oldies.configuration.get_config", return_value=config):
         with pytest.raises(SystemExit) as caught_exit:
             check_fixmes.main()
+    captured = capfd.readouterr()
 
     assert caught_exit.value.code == 0
-    assert 'failures="0"' in xunit_path.read_text()
+    assert 'failures="0"' in captured.out

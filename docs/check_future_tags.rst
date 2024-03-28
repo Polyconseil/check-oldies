@@ -130,18 +130,16 @@ default foreground color.
 | Example: ``colorize-errors = false``.
 
 
-.. _check_future_tags_conf_xunit_file:
+.. _check_future_tags_conf_format:
 
-``xunit-file`` (overridable via the command line)
-.................................................
+``format`` (overridable via the command line)
+.............................................
 
-The path to the xUnit report file to generate. **check-future-tags**
-gracefully creates parent directories of the file if they do not
-exist.
+The output format.
 
-| Type: string (a path).
-| Default: none (no xUnit file is generated).
-| Example: ``xunit-file = "reports/xunit.xml"``.
+| Type: string, one of : ``text`` or ``xunit``.
+| Default: ``text``
+| Example: ``format = "xunit"``.
 
 
 Detection options

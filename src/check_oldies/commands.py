@@ -1,5 +1,9 @@
 import os
-import pipes
+# FIXME (dbaty, 2024-03-28): `pipes` is deprecated since Python 3.11,
+# will be removed in 3.13. We should use `subprocess` instead (but
+# we'll have to make sure that we can do that and still support 3.8
+# and 3.9). or perhaps get rid of it?
+import pipes  # pylint: disable=deprecated-module
 import subprocess
 import tempfile
 

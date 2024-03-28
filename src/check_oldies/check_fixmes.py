@@ -2,23 +2,10 @@ import argparse
 import os
 import sys
 
-from . import annotations
+import check_oldies.annotations
+
 from . import configuration
-from . import xunit
-
-
-def annotation_str(annotation):
-    return (
-        f"{annotation.assignee: <15} - {annotation.age: >4} days - "
-        f"{annotation.filename}:{annotation.line_no}: {annotation.line_content.strip()}"
-    )
-
-
-def orphan_str(orphan):
-    return (
-        f"{orphan.author: <15} -   ORPHAN  - "
-        f"{orphan.path}:{orphan.line_no}: Unknown tag {orphan.tag}"
-    )
+from . import output
 
 
 def get_parser():
@@ -41,11 +28,19 @@ def get_parser():
         ),
     )
     parser.add_argument(
+        "--format",
+        default=output.OutputFormat.TEXT,
+        dest="output_format",
+        help="Output format. Defaults to human-readable text (one result per line).",
+        choices=sorted(output.OutputFormat),
+        type=output.OutputFormat,
+    )
+    parser.add_argument(
         "--max-age",
         type=int,
         help=(
             f"Maximum age in days allowed for an annotation, errors otherwise. "
-            f"Defaults to {annotations.Config.max_age}."
+            f"Defaults to {check_oldies.annotations.Config.max_age}."
         ),
     )
     parser.add_argument(
@@ -55,65 +50,40 @@ def get_parser():
         dest="colorize_errors",
         help="Do not colorize errors. Defaults to colorizing errors in red.",
     )
-    parser.add_argument(
-        "--xunit-file",
-        action="store",
-        help="Path of the xUnit report file to write. Defaults to no xUnit output.",
-    )
     return parser
 
 
 def main():
     parser = get_parser()
     config = configuration.get_config(
-        "check-fixmes", parser, sys.argv[1:], annotations.Config
+        "check-fixmes", parser, sys.argv[1:], check_oldies.annotations.Config
     )
     if not configuration.is_git_directory(config.path):
         sys.exit(f'Invalid path: "{config.path}" is not a Git repository.')
 
-    if config.colorize_errors:
-        warn = "\033[91m{}\033[0m".format
-    else:
-        warn = lambda text: text  # pylint: disable=unnecessary-lambda-assignment
+    annotations = check_oldies.annotations.get_annotations(config)
+    annotations.sort(key=lambda f: (f.assignee, -f.age, f.filename, f.line_no))
+    has_old_annotations = any(ann for ann in annotations if ann.is_old)
 
-    # Look for old annotations
-    out = []
-    uncolorized_out = []
-    all_annotations = sorted(
-        annotations.get_annotations(config),
-        key=lambda f: (f.assignee, -f.age, f.filename, f.line_no),
-    )
-    for annotation in all_annotations:
-        line = annotation_str(annotation)
-        out.append(warn(line) if annotation.is_old else line)
-        uncolorized_out.append(line if annotation.is_old else line)
-    has_old_annotations = any(ann for ann in all_annotations if ann.is_old)
-
-    out = os.linesep.join(out)
+    ok_msg = err_msg = ""
     if has_old_annotations:
         err_msg = "NOK: Some annotations are too old."
-        print(err_msg)
     else:
-        err_msg = ""
-        if all_annotations:
-            print("OK: All annotations are fresh.")
+        if annotations:
+            ok_msg = "OK: All annotations are fresh."
         else:
-            print("OK: No annotations were found.")
+            ok_msg = "OK: No annotations were found."
 
-    if out:
-        print(out)
-
-    if config.xunit_file:
-        uncolorized_out = os.linesep.join(uncolorized_out)
-        xunit.create_xunit_file(
-            os.path.abspath(config.xunit_file),
-            suite_name="check-fixmes",
-            case_name="fixmes",
-            class_name="CheckFixmes",
-            err_msg=err_msg,
-            stdout=uncolorized_out,
-            stderr="",
-        )
+    output.printer(
+        annotations,
+        config.output_format,
+        ok_message=ok_msg,
+        error_message=err_msg,
+        colorize_errors=config.colorize_errors,
+        xunit_suite_name="check-fixmes",
+        xunit_case_name="fixmes",
+        xunit_class_name="CheckFixmes",
+    )
 
     sys.exit(os.EX_DATAERR if has_old_annotations else os.EX_OK)
 

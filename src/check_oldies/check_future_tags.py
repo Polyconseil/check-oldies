@@ -4,14 +4,7 @@ import sys
 
 from . import annotations
 from . import configuration
-from . import xunit
-
-
-def orphan_str(orphan):
-    return (
-        f"{orphan.author: <15} -   ORPHAN  - "
-        f"{orphan.path}:{orphan.line_no}: Unknown tag {orphan.tag}"
-    )
+from . import output
 
 
 def get_parser():
@@ -41,9 +34,12 @@ def get_parser():
         help="Do not colorize errors. Defaults to colorizing errors in red.",
     )
     parser.add_argument(
-        "--xunit-file",
-        action="store",
-        help="Path of the xUnit report file to write. Defaults to no xUnit output.",
+        "--format",
+        default=output.OutputFormat.TEXT,
+        dest="output_format",
+        help="Output format. Defaults to human-readable text (one result per line).",
+        choices=sorted(output.OutputFormat),
+        type=output.OutputFormat,
     )
     return parser
 
@@ -56,40 +52,24 @@ def main():
     if not configuration.is_git_directory(config.path):
         sys.exit(f'Invalid path: "{config.path}" is not a Git repository.')
 
-    if config.colorize_errors:
-        warn = "\033[91m{}\033[0m".format
-    else:
-        warn = lambda text: text  # pylint: disable=unnecessary-lambda-assignment
-
-    # Look for orphan FUTURE tags
-    out = []
-    uncolorized_out = []
     orphan_futures = annotations.get_orphan_futures(config)
-    for orphan in orphan_futures:
-        out.append(warn(orphan_str(orphan)))
-        uncolorized_out.append(orphan_str(orphan))
 
-    out = os.linesep.join(out)
+    ok_msg = err_msg = ""
     if orphan_futures:
         err_msg = "NOK: There are orphan FUTURE tags."
-        print(err_msg)
     else:
-        err_msg = ""
-        print("OK: No orphan FUTURE tags were found.")
-    if out:
-        print(out)
+        ok_msg = "OK: No orphan FUTURE tags were found."
 
-    if config.xunit_file:
-        uncolorized_out = os.linesep.join(uncolorized_out)
-        xunit.create_xunit_file(
-            os.path.abspath(config.xunit_file),
-            suite_name="check-future-tags",
-            case_name="future-tags",
-            class_name="CheckFutureTags",
-            err_msg=err_msg,
-            stdout=uncolorized_out,
-            stderr="",
-        )
+    output.printer(
+        orphan_futures,
+        config.output_format,
+        ok_message=ok_msg,
+        error_message=err_msg,
+        colorize_errors=config.colorize_errors,
+        xunit_suite_name="check-future-tags",
+        xunit_case_name="future-tags",
+        xunit_class_name="CheckFutureTags",
+    )
 
     sys.exit(os.EX_DATAERR if orphan_futures else os.EX_OK)
 

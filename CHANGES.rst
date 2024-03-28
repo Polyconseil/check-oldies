@@ -1,7 +1,14 @@
-0.8.11 (unreleased)
+0.9.0 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- |backward-incompatible| Remove ``--xunit-file`` argument from
+  ``check-branches`` and ``check-fixmes`` commands. It can be replaced
+  by a new ``--format=xunit`` argument and redirecting the standard
+  output to a file.
+
+  This change is needed to properly introduce the ``--format``
+  argument that controls the formatting output, which is now directed
+  to the standard output.
 
 
 0.8.10 (2023-08-16)

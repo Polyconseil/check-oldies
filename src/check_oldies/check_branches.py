@@ -4,7 +4,8 @@ import sys
 
 from . import branches
 from . import configuration
-from . import xunit
+from . import output
+
 
 
 def get_parser():
@@ -17,6 +18,14 @@ def get_parser():
             f"Path of the configuration file. "
             f"Defaults to {configuration.PYPROJECT_FILENAME} if it exists."
         ),
+    )
+    parser.add_argument(
+        "--format",
+        default=output.OutputFormat.TEXT,
+        dest="output_format",
+        help="Output format. Defaults to human-readable text (one result per line).",
+        choices=sorted(output.OutputFormat),
+        type=output.OutputFormat,
     )
     parser.add_argument(
         "path",
@@ -41,18 +50,7 @@ def get_parser():
         dest="colorize_errors",
         help="Do not colorize errors. Defaults to colorizing errors in red.",
     )
-    parser.add_argument(
-        "--xunit-file",
-        action="store",
-        help="Path of the xUnit report file to write. Defaults to no xUnit output.",
-    )
     return parser
-
-
-def branch_str(branch):
-    return (
-        f"{branch.author[:30]: <30} - {branch.age: >4} days - {branch.name_and_details}"
-    )
 
 
 def main():
@@ -63,44 +61,27 @@ def main():
     if not configuration.is_git_directory(config.path):
         sys.exit(f'Invalid path: "{config.path}" is not a Git repository.')
 
-    if config.colorize_errors:
-        warn = "\033[91m{}\033[0m".format
-    else:
-        warn = lambda text: text  # pylint: disable=unnecessary-lambda-assignment
+    branch_results = branches.get_branches(config)
+    branch_results.sort(key=lambda branch: (branch.author, -branch.age, branch.name))
+    has_old_branches = any(branch for branch in branch_results if branch.is_old)
 
-    all_branches = branches.get_branches(config)
-
-    out = []
-    uncolorized_out = []
-    for branch in sorted(
-        all_branches, key=lambda branch: (branch.author, -branch.age, branch.name)
-    ):
-        line = branch_str(branch)
-        out.append(warn(line) if branch.is_old else line)
-        uncolorized_out.append(line if branch.is_old else line)
-    has_old_branches = any(branch for branch in all_branches if branch.is_old)
-
-    out = os.linesep.join(out)
     if has_old_branches:
         err_msg = "NOK: Some branches are too old."
-        print(err_msg)
+        ok_msg = ""
     else:
         err_msg = ""
-        print("OK: All branches are fresh.")
-    if out:
-        print(out)
+        ok_msg = "OK: All branches are fresh."
 
-    if config.xunit_file:
-        uncolorized_out = os.linesep.join(uncolorized_out)
-        xunit.create_xunit_file(
-            os.path.abspath(config.xunit_file),
-            "check-branches",
-            "branches",
-            "CheckBranches",
-            err_msg=err_msg,
-            stdout=uncolorized_out,
-            stderr="",
-        )
+    output.printer(
+        branch_results,
+        config.output_format,
+        ok_message=ok_msg,
+        error_message=err_msg,
+        colorize_errors=config.colorize_errors,
+        xunit_suite_name="check-branches",
+        xunit_case_name="branches",
+        xunit_class_name="CheckBranches",
+    )
 
     sys.exit(os.EX_DATAERR if has_old_branches else os.EX_OK)
 

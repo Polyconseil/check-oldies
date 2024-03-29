@@ -45,7 +45,7 @@ Usage and possible customization
 .. code-block:: console
 
     $ check-fixmes --help
-    usage: check-fixmes [-h] [--conf CONF] [--format {text,xunit}] [--max-age MAX_AGE] [--no-color] [path]
+    usage: check-fixmes [-h] [--conf CONF] [--format {csv,text,xunit}] [--max-age MAX_AGE] [--no-color] [path]
 
     Check your code for unattended annotations
 
@@ -55,7 +55,7 @@ Usage and possible customization
     options:
       -h, --help            show this help message and exit
       --conf CONF           Path of the configuration file. Defaults to pyproject.toml if it exists.
-      --format {text,xunit}
+      --format {csv,text,xunit}
                             Output format. Defaults to human-readable text (one result per line).
       --max-age MAX_AGE     Maximum age in days allowed for an annotation, errors otherwise. Defaults to 180.
       --no-color            Do not colorize errors. Defaults to colorizing errors in red.
@@ -194,7 +194,7 @@ default foreground color.
 
 The output format.
 
-| Type: string, one of : ``text`` or ``xunit``.
+| Type: string, one of: ``csv``, ``text`` or ``xunit``.
 | Default: ``text``
 | Example: ``format = "xunit"``.
 

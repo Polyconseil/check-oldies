@@ -26,7 +26,7 @@ Usage
 .. code-block:: console
 
     $ check-branches --help
-    usage: check-branches [-h] [--conf CONF] [--format {text,xunit}] [--max-age MAX_AGE] [--no-color] [path]
+    usage: check-branches [-h] [--conf CONF] [--format {csv,text,xunit}] [--max-age MAX_AGE] [--no-color] [path]
 
     Check your code for unattended branches
 
@@ -36,7 +36,7 @@ Usage
     options:
       -h, --help            show this help message and exit
       --conf CONF           Path of the configuration file. Defaults to pyproject.toml if it exists.
-      --format {text,xunit}
+      --format {csv,text,xunit}
                             Output format. Defaults to human-readable text (one result per line).
       --max-age MAX_AGE     Maximum age in days allowed for a branch, errors otherwise. Defaults to 90.
       --no-color            Do not colorize errors. Defaults to colorizing errors in red.
@@ -258,6 +258,6 @@ By default, errors (old branches) appear in red. Set this option to
 
 The output format.
 
-| Type: string, one of : ``text`` or ``xunit``.
+| Type: string, one of: ``csv``, ``text`` or ``xunit``.
 | Default: ``text``
 | Example: ``format = "xunit"``.

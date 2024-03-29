@@ -1,4 +1,6 @@
+import csv
 import enum
+import io
 import os
 import typing
 import xml.etree.ElementTree
@@ -7,6 +9,7 @@ from . import compat
 
 
 class OutputFormat(compat.StrEnum):
+    CSV = enum.auto()
     TEXT = enum.auto()
     XUNIT = enum.auto()
 
@@ -78,7 +81,32 @@ def xunit_formatter(
     return xml.etree.ElementTree.tostring(suite, encoding="utf-8").decode("utf-8")
 
 
+def _csv_values_converter(values: dict) -> dict:
+    converted = {}
+    for key, value in values.items():
+        csv_value = value
+        if csv_value is None:
+            csv_value = ""
+        elif isinstance(csv_value, bool):
+            csv_value = "1" if csv_value else "0"
+        converted[key] = csv_value
+    return converted
+
+
+def csv_formatter(objects: list, **unsupported_options) -> str:
+    if not objects:
+        return ""
+    out = io.StringIO()
+    writer = csv.DictWriter(out, fieldnames=objects[0].to_dict().keys())
+    writer.writeheader()
+    for obj in objects:
+        writer.writerow(_csv_values_converter(obj.to_dict()))
+    return out.getvalue()
+
+
 def get_formatter(output_format) -> typing.Callable:
+    if output_format == OutputFormat.CSV:
+        return csv_formatter
     if output_format == OutputFormat.TEXT:
         return text_formatter
     if output_format == OutputFormat.XUNIT:
@@ -89,4 +117,5 @@ def get_formatter(output_format) -> typing.Callable:
 def printer(objects: list, output_format: OutputFormat, **options):
     formatter = get_formatter(output_format)
     formatted = formatter(objects, **options)
-    print(formatted)
+    if formatted:
+        print(formatted)

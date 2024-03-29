@@ -90,6 +90,16 @@ class Annotation:
             f"{self.filename}:{self.line_no}: {self.line_content.strip()}"
         )
 
+    def to_dict(self):
+        return {
+            "filename": self.filename,
+            "line_no": self.line_no,
+            "assignee": self.assignee,
+            "line_content": self.line_content,
+            "age": self.age,
+            "is_old": self.is_old,
+        }
+
 
 @dataclasses.dataclass
 class FutureTag:
@@ -105,6 +115,14 @@ class FutureTag:
             f"{self.author: <15} -   ORPHAN  - "
             f"{self.path}:{self.line_no}: Unknown tag {self.tag}"
         )
+
+    def to_dict(self):
+        return {
+            "path": self.path,
+            "line_no": self.line_no,
+            "tag": self.tag,
+            "author": self.author,
+        }
 
 
 def get_annotation_candidates(directory, annotation_regex, whitelist):

@@ -137,7 +137,7 @@ default foreground color.
 
 The output format.
 
-| Type: string, one of : ``text`` or ``xunit``.
+| Type: string, one of: ``csv``, ``text`` or ``xunit``.
 | Default: ``text``
 | Example: ``format = "xunit"``.
 

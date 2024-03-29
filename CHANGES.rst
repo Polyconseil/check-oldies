@@ -15,6 +15,9 @@
   introduced that reports orphan future tags. **check-fixmes** does
   **not** report those tags anymore, it only reports outdated FIXME's.
 
+- All commands now have a CSV output format, available with the
+  ``--format=csv`` argument.
+
 
 0.8.10 (2023-08-16)
 -------------------

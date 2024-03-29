@@ -106,6 +106,18 @@ class BranchInfo:
             f"{self.author[:30]: <30} - {self.age: >4} days - {self.name_and_details}"
         )
 
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "author": self.author,
+            "age": self.age,
+            "is_old": self.is_old,
+            "url": self.url,
+            "pull_request_number": self.pull_request.number if self.pull_request else None,
+            "pull_request_state": self.pull_request.state if self.pull_request else None,
+            "pull_request_url": self.pull_request.url if self.pull_request else None,
+        }
+
 
 def get_repository_info(path):
     """Extract the repository owner and name from the origin remote."""

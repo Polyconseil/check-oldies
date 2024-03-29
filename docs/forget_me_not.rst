@@ -257,5 +257,6 @@ The user to use when contacting the SMTP host to send e-mail reports.
 .................
 
 The password to use when contacting the SMTP host to send e-mail reports.
+
 | Type: string.
 | Example: ``smtp.password = "SECRET"``.

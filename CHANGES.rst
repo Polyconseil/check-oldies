@@ -7,7 +7,7 @@
 
 
 0.8.10 (2023-08-16)
-------------------
+-------------------
 
 - Add main branch to calm branches
 
@@ -41,7 +41,7 @@
 ------------------
 
 - Add ``ignore_orphans_annotations`` config option.
-This option ignore orphan future tags check on ignored annotations.
+  This option ignore orphan future tags check on ignored annotations.
 
 
 0.8.4 (2020-11-18)

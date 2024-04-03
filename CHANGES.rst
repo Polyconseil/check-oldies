@@ -1,7 +1,9 @@
-0.8.11 (unreleased)
--------------------
+1.0.0 (unreleased)
+------------------
 
-- Nothing changed yet.
+- |backward-incompatible| A new **check-future-tags** command is
+  introduced that reports orphan future tags. **check-fixmes** does
+  **not** report those tags anymore, it only reports outdated FIXME's.
 
 
 0.8.10 (2023-08-16)

@@ -6,10 +6,10 @@ forget-me-not
 Rationale
 =========
 
-**check-fixmes** and **check-branches** can be run as part of the test
-suite of each project (by a continuous integration system such as
-Jenkins). They break builds when they detect old annotations or
-branches.
+**check-branches**, **check-fixmes** and **check-future-tags** can be
+run as part of the test suite of each project (by a continuous
+integration system such as Jenkins). They break builds when they
+detect old annotations or branches.
 
 But nobody wants to see builds break unexpectedly. What if you were
 warned that a build *will soon* break because of an old annotation or
@@ -47,8 +47,8 @@ details.
 To detect old annotations and branches, **forget-me-not** uses the
 configuration files **of each project** (or defaults for project that
 do not have configuration files). See previous chapters for further
-details about the configuration of **check-fixmes** and
-**check-branches**.
+details about the configuration of **check-branches**,
+**check-fixmes** and **check-future-tags**.
 
 
 .. _forget_me_not_configuration:
@@ -254,7 +254,7 @@ The user to use when contacting the SMTP host to send e-mail reports.
 | Example: ``smtp.user = "USERNAME"``.
 
 ``smtp.password``
-.............
+.................
 
 The password to use when contacting the SMTP host to send e-mail reports.
 | Type: string.

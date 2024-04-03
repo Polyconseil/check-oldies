@@ -26,6 +26,7 @@ quality:
 	pylint --reports=no setup.py src/check_oldies tests
 	check-branches
 	check-fixmes
+	check-future-tags
 	python setup.py sdist >/dev/null 2>&1 && twine check dist/*
 
 .PHONY: clean

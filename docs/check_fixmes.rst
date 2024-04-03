@@ -5,17 +5,11 @@ check-fixmes
 Features and usage
 ==================
 
-There are two main features:
+This command detects old annotations: FIXME, TODO, etc.
 
-- detection of old annotations (FIXME, TODO, etc.);
-- detection of forgotten FUTURE tags.
-
-
-Detection of old annotations
-----------------------------
 
 Rationale and principles
-........................
+------------------------
 
 Developers use annotations to indicate that some code is deficient:
 FIXME, TODO, OPTIMIZE, HACK, BUG, etc. Semantics vary, but the overall
@@ -46,7 +40,7 @@ used.
 
 
 Usage and possible customization
-................................
+--------------------------------
 
 .. code-block:: console
 
@@ -96,64 +90,19 @@ be an annotation, but not in this context. For example, in a CSS file:
     }
 
 If you need to ignore whole files, see the :ref:`whitelist option
-<conf_whitelist>`.
+<check_fixmes_conf_whitelist>`.
 
 Possible customizations:
 
 - which type of annotations are taken in account (FIXME, TODO,
   OPTIMIZE, etc.): see the :ref:`annotations option
-  <conf_annotations>`;
+  <check_fixmes_conf_annotations>`;
 
 - how assignments are formatted: see the the :ref:`assignee_regex
-  option <conf_assignee_regex>`;
+  option <check_fixmes_conf_assignee_regex>`;
 
 - the age above which an annotation is considered old: see the
-  :ref:`max-age option <conf_max_age>`;
-
-See the :ref:`check_fixmes_configuration` section below for full details.
-
-
-Detection of orphan FUTURE tags
--------------------------------
-
-Rationale and principles
-........................
-
-Developers sometimes plan a broad modification that will span multiple
-files. Instead of littering FIXME annotations everywhere, they can set
-a single FIXME annotation and a FUTURE-xxx tag on the same line. Then,
-wherever we need to make a modification, we only mention this
-FUTURE-xxx tag without any FIXME. If we have to "postpone" a FIXME,
-there is only line to touch.
-
-Example:
-
-.. code-block:: text
-
-    # in file1.py:
-    #
-    #     FIXME (jsmith, FUTURE-SWITCH-TO-V2): remove this field when we switch to v2
-    #
-    # in file2.py:
-    #
-    #     FUTURE-SWITCH-TO-V2: deprecate usage when we switch to v2
-
-If we ever remove the FIXME but keep the FUTURE-SWITCH-TO-V2 tag in
-``file2.py``, it is a mistake and **check-fixmes** warns us.
-
-
-Usage and possible customization
-................................
-
-**check-fixmes** looks for tags that start with ``FUTURE-``
-(e.g. ``FUTURE-SWITCH-TO-V2``) to make sure that at least one of them
-appears on the same line as an annotation. If not, it is considered an
-orphan tag and is reported as an error.
-
-As for annotations, you can ignore a line by using
-``no-check-fixmes``, and ignore whole files with the :ref:`whitelist
-option <conf_whitelist>`. You can configure how tags are detected with
-the :ref:`future_tag_regex option <conf_future_tag_regex>`.
+  :ref:`max-age option <check_fixmes_conf_max_age>`;
 
 See the :ref:`check_fixmes_configuration` section below for full details.
 
@@ -195,7 +144,7 @@ configuration file:
 Input options
 -------------
 
-.. _conf_path:
+.. _check_fixmes_conf_path:
 
 ``path`` (overridable via the command line)
 ...........................................
@@ -208,7 +157,7 @@ annotations (recursively). It must be a Git checkout repository.
 | Example: ``path = "src"``.
 
 
-.. _conf_whitelist:
+.. _check_fixmes_conf_whitelist:
 
 ``whitelist``
 .............
@@ -224,7 +173,7 @@ whitelist whole files by providing a list of glob patterns.
 Output options
 --------------
 
-.. _conf_colorize_errors:
+.. _check_fixmes_conf_colorize_errors:
 
 ``colorize-errors``
 ...................
@@ -238,7 +187,7 @@ default foreground color.
 | Example: ``colorize-errors = false``.
 
 
-.. _conf_xunit_file:
+.. _check_fixmes_conf_xunit_file:
 
 ``xunit-file`` (overridable via the command line)
 .................................................
@@ -255,7 +204,7 @@ exist.
 Detection options
 -----------------
 
-.. _conf_annotations:
+.. _check_fixmes_conf_annotations:
 
 ``annotations``
 ...............
@@ -269,7 +218,7 @@ case insensitive: by default, both "todo", "TODO", "fixme" and
 | Example: ``annotations = ["todo", "optimize", "fixme", "hack"]``.
 
 
-.. _conf_assignee_regex:
+.. _check_fixmes_conf_assignee_regex:
 
 ``assignee-regex``
 ..................
@@ -290,31 +239,7 @@ assignee in an annotation. Requirements:
 .. _Python syntax: https://docs.python.org/3/library/re.html#regular-expression-syntax
 
 
-.. _conf_future_tag_regex:
-
-``future-tag-regex``
-....................
-
-The extended regular expression to use to detect FUTURE tags.
-
-| Type: string (an extended regular expression).
-| Default: ``"FUTURE-[-[:alnum:]\._]+?"``.
-| Example: ``future-tag-regex = "HEREAFTER-[-[:alnum:]\._]+?"``.
-
-.. _conf_ignored_orphans_annotations:
-
-``ignored_orphans_annotations``
-...............................
-
-The list of annotations which will not trigger orphan FUTURE tags checks.
-Note that **check-fixmes** is case insensitive:
-by default, both "wontfix", "WONTFIX" will be ignored.
-
-| Type: list.
-| Default: ``["wontfix", "xxx"]`` (case insensitive).
-| Example: ``ignored_annotations = ["wontfix", "nofix"]``.
-
-.. _conf_max_age:
+.. _check_fixmes_conf_max_age:
 
 ``max-age`` (overridable via the command line)
 ..............................................

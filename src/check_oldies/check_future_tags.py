@@ -7,13 +7,6 @@ from . import configuration
 from . import xunit
 
 
-def annotation_str(annotation):
-    return (
-        f"{annotation.assignee: <15} - {annotation.age: >4} days - "
-        f"{annotation.filename}:{annotation.line_no}: {annotation.line_content.strip()}"
-    )
-
-
 def orphan_str(orphan):
     return (
         f"{orphan.author: <15} -   ORPHAN  - "
@@ -23,7 +16,7 @@ def orphan_str(orphan):
 
 def get_parser():
     parser = argparse.ArgumentParser(
-        prog="check-fixmes", description="Check your code for unattended annotations"
+        prog="check-future-tags", description="Check your code for unattended future tags"
     )
     parser.add_argument(
         "--conf",
@@ -38,14 +31,6 @@ def get_parser():
         help=(
             "Git-managed path where search should happen. "
             "Defaults to the working directory."
-        ),
-    )
-    parser.add_argument(
-        "--max-age",
-        type=int,
-        help=(
-            f"Maximum age in days allowed for an annotation, errors otherwise. "
-            f"Defaults to {annotations.Config.max_age}."
         ),
     )
     parser.add_argument(
@@ -66,7 +51,7 @@ def get_parser():
 def main():
     parser = get_parser()
     config = configuration.get_config(
-        "check-fixmes", parser, sys.argv[1:], annotations.Config
+        "check-future-tags", parser, sys.argv[1:], annotations.Config
     )
     if not configuration.is_git_directory(config.path):
         sys.exit(f'Invalid path: "{config.path}" is not a Git repository.')
@@ -76,30 +61,21 @@ def main():
     else:
         warn = lambda text: text  # pylint: disable=unnecessary-lambda-assignment
 
-    # Look for old annotations
+    # Look for orphan FUTURE tags
     out = []
     uncolorized_out = []
-    all_annotations = sorted(
-        annotations.get_annotations(config),
-        key=lambda f: (f.assignee, -f.age, f.filename, f.line_no),
-    )
-    for annotation in all_annotations:
-        line = annotation_str(annotation)
-        out.append(warn(line) if annotation.is_old else line)
-        uncolorized_out.append(line if annotation.is_old else line)
-    has_old_annotations = any(ann for ann in all_annotations if ann.is_old)
+    orphan_futures = annotations.get_orphan_futures(config)
+    for orphan in orphan_futures:
+        out.append(warn(orphan_str(orphan)))
+        uncolorized_out.append(orphan_str(orphan))
 
     out = os.linesep.join(out)
-    if has_old_annotations:
-        err_msg = "NOK: Some annotations are too old."
+    if orphan_futures:
+        err_msg = "NOK: There are orphan FUTURE tags."
         print(err_msg)
     else:
         err_msg = ""
-        if all_annotations:
-            print("OK: All annotations are fresh.")
-        else:
-            print("OK: No annotations were found.")
-
+        print("OK: No orphan FUTURE tags were found.")
     if out:
         print(out)
 
@@ -107,15 +83,15 @@ def main():
         uncolorized_out = os.linesep.join(uncolorized_out)
         xunit.create_xunit_file(
             os.path.abspath(config.xunit_file),
-            suite_name="check-fixmes",
-            case_name="fixmes",
-            class_name="CheckFixmes",
+            suite_name="check-future-tags",
+            case_name="future-tags",
+            class_name="CheckFutureTags",
             err_msg=err_msg,
             stdout=uncolorized_out,
             stderr="",
         )
 
-    sys.exit(os.EX_DATAERR if has_old_annotations else os.EX_OK)
+    sys.exit(os.EX_DATAERR if orphan_futures else os.EX_OK)
 
 
 if __name__ == "__main__":  # pragma: no cover

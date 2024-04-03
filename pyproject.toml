@@ -13,6 +13,17 @@ whitelist = [
     "docs/*.rst",
 ]
 
+[tool.check-future-tags]
+path = "."
+
+annotations = [
+    "fixme",
+    "todo",
+]
+whitelist = [
+    "docs/*.rst",
+]
+
 
 [tool.isort]
 multi_line_output = 3

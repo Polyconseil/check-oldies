@@ -70,7 +70,7 @@ def main():
     annotations = check_oldies.annotations.get_annotations(config)
     if config.only_old:
         annotations = [a for a in annotations if a.is_old]
-    annotations.sort(key=lambda f: (f.assignee, -f.age, f.filename, f.line_no))
+    annotations.sort(key=lambda f: (f.assignee, -f.age, f.path, f.line_no))
     has_old_annotations = any(ann for ann in annotations if ann.is_old)
 
     ok_msg = err_msg = ""

@@ -194,7 +194,7 @@ def generate_emails(reports_by_email, config):
                     config.email_body_annotation_line_template.format(
                         age=annotation.age,
                         repo=annotation.repository,
-                        path=annotation.filename,
+                        path=annotation.path,
                         line_no=annotation.line_no,
                         line_content=annotation.line_content.strip(),
                     )

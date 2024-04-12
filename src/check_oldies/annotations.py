@@ -74,7 +74,7 @@ class Config:
 
 @dataclasses.dataclass
 class Annotation:
-    filename: str
+    path: str
     line_no: int
     line_content: str
     age: int = None
@@ -88,12 +88,12 @@ class Annotation:
     def to_text(self):
         return (
             f"{self.assignee: <15} - {self.age: >4} days - "
-            f"{self.filename}:{self.line_no}: {self.line_content.strip()}"
+            f"{self.path}:{self.line_no}: {self.line_content.strip()}"
         )
 
     def to_dict(self):
         return {
-            "filename": self.filename,
+            "path": self.path,
             "line_no": self.line_no,
             "assignee": self.assignee,
             "line_content": self.line_content,
@@ -196,7 +196,7 @@ def get_annotations(config: Config):
 
     for annotation in annotations:
         last_committer, last_modification = get_line_blame(
-            annotation.filename, annotation.line_no, cwd=config.path
+            annotation.path, annotation.line_no, cwd=config.path
         )
         last_committer = get_login_from_committer_email(last_committer)
         match = config.py_assignee_regex.search(annotation.line_content)

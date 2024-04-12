@@ -199,6 +199,17 @@ The output format.
 | Example: ``format = "xunit"``.
 
 
+``only-old`` (overridable via the command line)
+...............................................
+
+By default, all annotations are displayed. When this option is
+enabled, only old annotations are displayed.
+
+| Type: boolean.
+| Default: ``false``
+| Example: ``only-old = true``.
+
+
 Detection options
 -----------------
 

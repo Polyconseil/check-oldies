@@ -44,6 +44,12 @@ def get_parser():
         ),
     )
     parser.add_argument(
+        "--only-old",
+        action="store_true",
+        default=False,
+        help="Show only old branches. By default, the command shows all branches."
+    )
+    parser.add_argument(
         "--no-color",
         action="store_false",
         default=True,
@@ -62,6 +68,8 @@ def main():
         sys.exit(f'Invalid path: "{config.path}" is not a Git repository.')
 
     branches = check_oldies.branches.get_branches(config)
+    if config.only_old:
+        branches = [branch for branch in branches if branch.is_old]
     branches.sort(key=lambda branch: (branch.author, -branch.age, branch.name))
     has_old_branches = any(branch for branch in branches if branch.is_old)
 

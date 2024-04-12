@@ -22,6 +22,7 @@ class Config:
     max_age: int = 180
 
     output_format: output.OutputFormat = output.OutputFormat.TEXT
+    only_old: bool = False
     colorize_errors: bool = True
 
     annotations: typing.Sequence = ("todo", "fixme", )  # no-check-fixmes

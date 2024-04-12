@@ -18,6 +18,10 @@
 - All commands now have a CSV output format, available with the
   ``--format=csv`` argument.
 
+- **check-fixmes** and **check-branches** commands now have a
+  ``--only-old`` argument to show, well, only old annotations or
+  branches.
+
 
 0.8.10 (2023-08-16)
 -------------------

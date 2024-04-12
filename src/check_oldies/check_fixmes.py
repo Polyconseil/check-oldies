@@ -44,6 +44,12 @@ def get_parser():
         ),
     )
     parser.add_argument(
+        "--only-old",
+        action="store_true",
+        default=False,
+        help="Show only old annotations. By default, the command shows all annotations."
+    )
+    parser.add_argument(
         "--no-color",
         action="store_false",
         default=True,
@@ -62,6 +68,8 @@ def main():
         sys.exit(f'Invalid path: "{config.path}" is not a Git repository.')
 
     annotations = check_oldies.annotations.get_annotations(config)
+    if config.only_old:
+        annotations = [a for a in annotations if a.is_old]
     annotations.sort(key=lambda f: (f.assignee, -f.age, f.filename, f.line_no))
     has_old_annotations = any(ann for ann in annotations if ann.is_old)
 

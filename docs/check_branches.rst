@@ -261,3 +261,14 @@ The output format.
 | Type: string, one of: ``csv``, ``text`` or ``xunit``.
 | Default: ``text``
 | Example: ``format = "xunit"``.
+
+
+``only-old`` (overridable via the command line)
+...............................................
+
+By default, all branches are displayed. When this option is enabled,
+only old branches are displayed.
+
+| Type: boolean.
+| Default: ``false``
+| Example: ``only-old = true``.

@@ -43,6 +43,7 @@ class Config:
 
     output_format: output.OutputFormat = output.OutputFormat.TEXT
     colorize_errors: bool = True
+    only_old: bool = False
 
     calm_branches: typing.Sequence = ("gh-pages", "master", "main", "prod", "maint(enance)?/.*")
     ignore_branches_without_pull_request: bool = False

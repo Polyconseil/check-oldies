@@ -4,6 +4,8 @@ import contextlib
 import os
 from unittest import mock
 
+import pytest
+
 from check_oldies import forget_me_not
 
 from . import base
@@ -20,7 +22,7 @@ def in_working_directory(path):
 
 
 @mock.patch("check_oldies.annotations.get_line_blame", base.fake_get_line_blame)
-def test_forget_me_not(capfd):  # capfd is a pytest fixture
+def test_forget_me_not(capfd: pytest.CaptureFixture):
     with in_working_directory(base.TEST_DIR_PATH / 'data'):
         forget_me_not.main(argv=[])
     captured = capfd.readouterr()

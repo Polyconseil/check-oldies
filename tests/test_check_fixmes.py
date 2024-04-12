@@ -12,7 +12,7 @@ from . import base
 
 
 @mock.patch("check_oldies.annotations.get_line_blame", base.fake_get_line_blame)
-def test_output_when_all_annotations_are_fresh(capfd):  # capfd is a pytest fixture
+def test_output_when_all_annotations_are_fresh(capfd: pytest.CaptureFixture):
     config = annotations.Config(
         path=base.TEST_DIR_PATH / "data/project1",
         max_age=9999,
@@ -39,7 +39,7 @@ def test_output_when_all_annotations_are_fresh(capfd):  # capfd is a pytest fixt
     assert stdout == expected
 
 
-def test_output_when_no_annotations(capfd):  # capfd is a pytest fixture
+def test_output_when_no_annotations(capfd: pytest.CaptureFixture):
     config = annotations.Config(path=base.TEST_DIR_PATH / "data/project2")
 
     with mock.patch("check_oldies.configuration.get_config", return_value=config):

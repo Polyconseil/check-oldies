@@ -12,7 +12,7 @@ from . import base
 
 
 @mock.patch("check_oldies.annotations.get_line_blame", base.fake_get_line_blame)
-def test_output_with_orphan_future_tags(capfd):  # capfd is a pytest fixture
+def test_output_with_orphan_future_tags(capfd: pytest.CaptureFixture):
     config = annotations.Config(
         path=base.TEST_DIR_PATH / "data/project3",
         colorize_errors=False,
@@ -35,7 +35,7 @@ def test_output_with_orphan_future_tags(capfd):  # capfd is a pytest fixture
 
 
 @mock.patch("check_oldies.annotations.get_line_blame", base.fake_get_line_blame)
-def test_output_with_ignored_annotations_orphans_future_tags(capfd):  # capfd is a pytest fixture
+def test_output_with_ignored_annotations_orphans_future_tags(capfd: pytest.CaptureFixture):
     config = annotations.Config(
         path=base.TEST_DIR_PATH / "data/project6",
         colorize_errors=False,

@@ -51,7 +51,7 @@ def test_get_repository_info():
             host, owner, repo_name = branches.get_repository_info('.')
 
 
-def test_output_fresh_branches(capfd):  # capfd is a pytest fixture
+def test_output_fresh_branches(capfd: pytest.CaptureFixture):
     config = branches.Config(
         path=base.TEST_DIR_PATH.parent,
         max_age=9999,
@@ -71,7 +71,7 @@ def test_output_fresh_branches(capfd):  # capfd is a pytest fixture
     assert stdout[0] == "OK: All branches are fresh."
 
 
-def test_output_old_branches(capfd):  # capfd is a pytest fixture
+def test_output_old_branches(capfd: pytest.CaptureFixture):
     with pytest.raises(TypeError):
         config = branches.Config(host_owner='Polyconseil')  # pylint: disable=unexpected-keyword-arg
 

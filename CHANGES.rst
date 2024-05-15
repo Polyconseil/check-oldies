@@ -8,6 +8,12 @@
 
 - |backward-incompatible| Remove support of Python 3.7.
 
+- |backward-incompatible| The `toml` optional dependency has been
+  removed. Trying to `pip install "check-oldies[toml]"` will result in
+  an error. Packages should now depend on simply `check-oldies`. The
+  optional `toml` dependency is now automatically installed, only if
+  necessary (i.e. under Python 3.10 only).
+
 - |backward-incompatible| Remove ``--xunit-file`` argument from all
   commands. It can be replaced by a new ``--format=xunit`` argument
   and redirecting the standard output to a file, like this::

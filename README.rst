@@ -72,7 +72,7 @@ Install with ``pip``, preferably in a virtual environment:
     $ python3 -m venv /path/to/your/virtualenv
     $ source /path/to/your/virtualenv/bin/activate
 
-    $ pip install "check-oldies[toml]"
+    $ pip install check-oldies
 
 
 Features, configuration and more

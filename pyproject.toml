@@ -57,7 +57,6 @@ enable = [
 ]
 
 disable = [
-    "arguments-differ",
     "attribute-defined-outside-init",
     "cyclic-import",
     "duplicate-code",
@@ -69,7 +68,6 @@ disable = [
     "missing-docstring",
     "no-member",
     "protected-access",
-    "superfluous-parens",
     "too-few-public-methods",
     "too-many-ancestors",
     "too-many-arguments",
@@ -81,6 +79,5 @@ disable = [
     "too-many-statements",
     "ungrouped-imports",
     "unused-argument",
-    "useless-return",
     "wrong-import-order",  # we `isort` with a custom config
 ]

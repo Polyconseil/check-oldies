@@ -3,8 +3,6 @@ from unittest import mock
 
 from check_oldies import annotations
 
-from . import base
-
 
 FAKE_GIT_BLAME_OUTPUT = """c106813f91ff43b8fc6e231c263bdaa344866157 136 136 1
 some value
@@ -67,15 +65,3 @@ def test_get_login_from_committer_email():
     assert login == "<@example.com>"  # should not be the empty string
     login = annotations.get_login_from_committer_email("John Smith")
     assert login == "John Smith"
-
-
-def test_git_supports_only_matching():
-    # We expect tests to run on a system that has a recent version of Git.
-    assert annotations.git_supports_only_matching()
-
-
-@mock.patch("check_oldies.annotations.git_supports_only_matching", lambda: False)
-def test_old_git_without_only_matching():
-    path = base.TEST_DIR_PATH / "data/project4"
-    futures = annotations.get_all_futures(path, base.TESTING_FUTURE_TAG, whitelist=[])
-    assert set(futures.keys()) == {"FEWTURE-BOOM", "FEWTURE-I-AM-AN-ORPHAN"}

@@ -2,10 +2,7 @@ import collections
 import dataclasses
 import datetime
 import re
-import subprocess
 import typing
-
-import pkg_resources
 
 from . import commands
 from . import output
@@ -230,66 +227,28 @@ def get_known_future_tags(directory, annotation_regex, future_tag_regex, whiteli
     return set(lines)
 
 
-def git_supports_only_matching():
-    out = subprocess.check_output(["git", "--version"]).decode("utf-8")
-    # output looks like "git version 2.26.0"
-    git_version = pkg_resources.parse_version(out.split()[2])
-    # `git grep --only-matching` appeared in Git 2.19.0
-    # https://github.com/git/git/blob/v2.19.0/Documentation/RelNotes/2.19.0.txt#L41
-    minimal_version = pkg_resources.parse_version("2.19.0")
-    return git_version >= minimal_version
-
-
 def get_all_futures(directory, future_tag_regex, whitelist):
     """Get all occurrences of FUTURE tags."""
-    # Old versions of Git (such as Git 2.1.4 that is shipped by Debian
-    # Jessie) do not support the `--only-matching` option. Pipe to
-    # `sed` instead.
-    if git_supports_only_matching():
-        grep = [
-            "git",
-            "grep",
-            "-I",  # ignore binary files
-            "--line-number",
-            "--extended-regexp",
-            "--only-matching",
-            "-e",
-            future_tag_regex,
-            "--and",
-            "--not",
-            "-e",
-            IGNORE_PRAGMA,
-        ]
-        grep.extend([f":(exclude){glob}" for glob in whitelist])
-        lines = commands.get_output(
-            grep,
-            cwd=directory,
-            valid_return_codes=(0, 1),  # 0 if there are matches, 1 otherwise
-        )
-    else:
-        grep = [
-            "git",
-            "grep",
-            "-I",  # ignore binary files
-            "--line-number",
-            "--extended-regexp",
-            "-e",
-            future_tag_regex,
-            "--and",
-            "--not",
-            "-e",
-            IGNORE_PRAGMA,
-            "--",  # needed on old versions...
-            ".",  # ... of git
-        ]
-        grep.extend([f":(exclude){glob}" for glob in whitelist])
-        sed = f'sed --regexp-extended "s/(.*?):.*?({future_tag_regex}).*?/\\1:\\2/g"'
-        lines = commands.get_pipe_command_output(
-            grep,
-            piped_to=sed,
-            cwd=directory,
-            valid_return_codes=(0, 1),  # 0 if there are matches, 1 otherwise
-        )
+    grep = [
+        "git",
+        "grep",
+        "-I",  # ignore binary files
+        "--line-number",
+        "--extended-regexp",
+        "--only-matching",
+        "-e",
+        future_tag_regex,
+        "--and",
+        "--not",
+        "-e",
+        IGNORE_PRAGMA,
+    ]
+    grep.extend([f":(exclude){glob}" for glob in whitelist])
+    lines = commands.get_output(
+        grep,
+        cwd=directory,
+        valid_return_codes=(0, 1),  # 0 if there are matches, 1 otherwise
+    )
 
     occurrences = collections.defaultdict(list)
     for line in lines:

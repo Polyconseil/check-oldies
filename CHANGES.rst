@@ -3,6 +3,9 @@
 
 - Add support of Python 3.12.
 
+- |backward-incompatible| Remove support of Git 2.18 and earlier
+  version. You must now have Git 2.19 (or a more recent version).
+
 - |backward-incompatible| Remove support of Python 3.7.
 
 - |backward-incompatible| Remove ``--xunit-file`` argument from all

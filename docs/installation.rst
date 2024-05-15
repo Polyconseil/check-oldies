@@ -1,9 +1,7 @@
 Installation
 ============
 
-You must have Python 3.8 or later, and a relatively recent version of
-Git. Git 2.1.4 (shipped with Debian Jessie) is known to work. More
-recent versions should work and are supported.
+You must have Python 3.8 or later, and Git 2.19.0 or later.
 
 Install with ``pip``, preferably in a `virtual environment`_:
 

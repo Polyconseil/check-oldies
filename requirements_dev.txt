@@ -1,4 +1,4 @@
--e .[toml]
+-e .
 
 # Testing
 pytest

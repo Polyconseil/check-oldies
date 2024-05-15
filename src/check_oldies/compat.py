@@ -1,4 +1,5 @@
 import enum
+import pathlib
 
 
 __all__ = ["StrEnum"]
@@ -36,3 +37,19 @@ except ImportError:  # Python < 3.11
         def _generate_next_value_(name, start, count, last_values):
             return name.lower()
     # fmt: on
+
+
+try:
+    import tomllib
+
+    def load_toml(path: pathlib.Path) -> dict:
+        with open(path, "rb") as fp:
+            return tomllib.load(fp)
+except ImportError: # Python < 3.11
+    try:
+        import toml
+
+        def load_toml(path: pathlib.Path) -> dict:
+            return toml.load(path)
+    except ImportError:
+        load_toml = None

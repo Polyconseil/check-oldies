@@ -1,6 +1,8 @@
 1.0.0 (unreleased)
 ------------------
 
+- |backward-incompatible| Remove support of Python 3.7.
+
 - |backward-incompatible| Remove ``--xunit-file`` argument from all
   commands. It can be replaced by a new ``--format=xunit`` argument
   and redirecting the standard output to a file, like this::

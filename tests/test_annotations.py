@@ -3,6 +3,8 @@ from unittest import mock
 
 from check_oldies import annotations
 
+from . import base
+
 
 FAKE_GIT_BLAME_OUTPUT = """c106813f91ff43b8fc6e231c263bdaa344866157 136 136 1
 some value
@@ -65,3 +67,26 @@ def test_get_login_from_committer_email():
     assert login == "<@example.com>"  # should not be the empty string
     login = annotations.get_login_from_committer_email("John Smith")
     assert login == "John Smith"
+
+
+
+class TestGetKnownFutureTag:
+    test_data_path = base.TEST_DIR_PATH / "data/project7"
+
+    def test_basics(self):
+        tags = annotations.get_known_future_tags(
+            directory=self.test_data_path,
+            annotation_regex=base.TESTING_ANNOTATIONS[0],
+            future_tag_regex=base.TESTING_FUTURE_TAG,
+            whitelist=(),
+        )
+        assert tags == {"FEWTURE-BOOM1", "FEWTURE-BOOM2"}
+
+    def test_whitelist(self):
+        tags = annotations.get_known_future_tags(
+            directory=self.test_data_path,
+            annotation_regex=base.TESTING_ANNOTATIONS[0],
+            future_tag_regex=base.TESTING_FUTURE_TAG,
+            whitelist=["file2.py"],
+        )
+        assert tags == {"FEWTURE-BOOM1"}

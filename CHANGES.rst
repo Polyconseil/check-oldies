@@ -1,6 +1,8 @@
 1.0.0 (unreleased)
 ------------------
 
+- Add support of Python 3.12.
+
 - |backward-incompatible| Remove support of Python 3.7.
 
 - |backward-incompatible| Remove ``--xunit-file`` argument from all

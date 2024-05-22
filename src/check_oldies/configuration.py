@@ -2,11 +2,7 @@ import os
 import subprocess
 import sys
 
-
-try:
-    import toml
-except ImportError:  # pragma: no cover
-    toml = None
+from . import compat
 
 
 PYPROJECT_FILENAME = "pyproject.toml"
@@ -34,13 +30,14 @@ def replace_dashes(options):
 
 
 def read_from_configuration_file(path, tool_name):
-    if not toml:  # pragma: no cover
+    if not compat.load_toml:  # pragma: no cover
         sys.exit(
             'You must install with `pip install "check-oldies[toml]" '
-            "to read from TOML configuration files."
+            "to read TOML configuration files."
         )
+
     try:
-        conf = toml.load(path)
+        conf = compat.load_toml(path)
     except Exception as exc:  # pylint: disable=broad-except # pragma: no cover
         sys.exit(f"Error reading {path}: {exc.args[-1]}")
 

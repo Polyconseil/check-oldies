@@ -1,4 +1,4 @@
--e .[toml]
+-e .
 
 # Testing
 pytest
@@ -10,7 +10,7 @@ sphinx_rtd_theme
 
 # Quality
 check-manifest
-isort[pyproject]
+isort
 pylint
 pylint_strict_informational
 twine

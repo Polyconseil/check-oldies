@@ -69,13 +69,24 @@ def test_get_login_from_committer_email():
     assert login == "John Smith"
 
 
-def test_git_supports_only_matching():
-    # We expect tests to run on a system that has a recent version of Git.
-    assert annotations.git_supports_only_matching()
 
+class TestGetKnownFutureTag:
+    test_data_path = base.TEST_DIR_PATH / "data/project7"
 
-@mock.patch("check_oldies.annotations.git_supports_only_matching", lambda: False)
-def test_old_git_without_only_matching():
-    path = base.TEST_DIR_PATH / "data/project4"
-    futures = annotations.get_all_futures(path, base.TESTING_FUTURE_TAG, whitelist=[])
-    assert set(futures.keys()) == {"FEWTURE-BOOM", "FEWTURE-I-AM-AN-ORPHAN"}
+    def test_basics(self):
+        tags = annotations.get_known_future_tags(
+            directory=self.test_data_path,
+            annotation_regex=base.TESTING_ANNOTATIONS[0],
+            future_tag_regex=base.TESTING_FUTURE_TAG,
+            whitelist=(),
+        )
+        assert tags == {"FEWTURE-BOOM1", "FEWTURE-BOOM2"}
+
+    def test_whitelist(self):
+        tags = annotations.get_known_future_tags(
+            directory=self.test_data_path,
+            annotation_regex=base.TESTING_ANNOTATIONS[0],
+            future_tag_regex=base.TESTING_FUTURE_TAG,
+            whitelist=["file2.py"],
+        )
+        assert tags == {"FEWTURE-BOOM1"}

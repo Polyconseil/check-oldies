@@ -13,3 +13,4 @@ exclude .readthedocs.yaml
 exclude Makefile
 exclude pyproject.toml
 exclude requirements_dev.txt
+exclude stubs/toml/__init__.pyi

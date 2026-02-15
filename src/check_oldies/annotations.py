@@ -74,9 +74,9 @@ class Annotation:
     path: str
     line_no: int
     line_content: str
-    age: int = None
-    assignee: str = None
-    is_old: bool = None
+    age: int = 0
+    assignee: str = ""
+    is_old: bool = False
 
     @property
     def must_warn(self):
@@ -104,7 +104,7 @@ class FutureTag:
     path: str
     line_no: int
     tag: str
-    author: str = None
+    author: str = ""
 
     must_warn = True
 

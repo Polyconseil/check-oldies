@@ -42,6 +42,12 @@ skip = [
 ]
 
 
+[tool.mypy]
+mypy_path = "stubs/"
+show_error_codes = true
+warn_unused_ignores = true
+
+
 [tool.pylint.MASTER]
 load-plugins = [
     "pylint_strict_informational",

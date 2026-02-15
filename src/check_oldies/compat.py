@@ -1,5 +1,6 @@
 import enum
 import pathlib
+import typing
 
 
 __all__ = ["StrEnum"]
@@ -11,7 +12,7 @@ except ImportError:  # Python < 3.11
     # pylint: disable=consider-using-f-string
     # Lifted from Python standard library, with docstrings removed for brevity.
     # https://github.com/python/cpython/blob/c1712ef066321c01bf09cba3f22fc474b5b8dfa7/Lib/enum.py
-    class StrEnum(str, enum.Enum):
+    class StrEnum(str, enum.Enum):  # type: ignore
         def __new__(cls, *values):
             "values must already be of type `str`"
             if len(values) > 3:
@@ -41,6 +42,8 @@ except ImportError:  # Python < 3.11
 
 try:
     import tomllib
+
+    load_toml: typing.Callable[[pathlib.Path], dict] | None
 
     def load_toml(path: pathlib.Path) -> dict:
         with open(path, "rb") as fp:

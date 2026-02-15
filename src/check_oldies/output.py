@@ -21,10 +21,14 @@ def text_formatter(
     colorize_errors=True,
     **unsupported_options,
 ) -> str:
+
+    def itself(text: str) -> str:
+        return text
+
     if colorize_errors:
         warn = "\033[91m{}\033[0m".format
     else:
-        warn = lambda text: text  # pylint: disable=unnecessary-lambda-assignment
+        warn = itself
 
     lines = []
     if ok_message:

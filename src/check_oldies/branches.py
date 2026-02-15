@@ -19,8 +19,8 @@ DEFAULT_API_URL = "https://api.github.com"
 @dataclasses.dataclass
 class GitHostApiAccessInfo:
     api_base_url: str = DEFAULT_API_URL
-    auth_token_file: str = None
-    auth_token_env_var: str = None
+    auth_token_file: str = ""
+    auth_token_env_var: str = ""
 
     def __post_init__(self):
         self.auth_token = self.get_auth_token()
@@ -37,7 +37,7 @@ class GitHostApiAccessInfo:
 
 @dataclasses.dataclass
 class Config:
-    platform: str = None
+    platform: str = ""
     path: str = "."
     max_age: int = 90
 
@@ -48,17 +48,27 @@ class Config:
     calm_branches: typing.Sequence = ("gh-pages", "master", "main", "prod", "maint(enance)?/.*")
     ignore_branches_without_pull_request: bool = False
 
-    host_api_access: dict = None
+    host_api_access: dict = dataclasses.field(default_factory=dict)
 
     # Cannot be configured, but is automatically filled in instead. Default value is irrelevant and only here to
     # initialize the field.
-    host: str = dataclasses.field(default=None, init=False)
-    host_owner: str = dataclasses.field(default=None, init=False)
-    repo_name: str = dataclasses.field(default=None, init=False)
+    host: str = ""
+    host_owner: str = ""
+    repo_name: str = ""
 
     def __post_init__(self):
         if self.host_api_access:
             self.host_api_access = GitHostApiAccessInfo(**self.host_api_access)
+
+        forbidden = {
+            attribute
+            for attribute in ("host", "host_owner", "repo_name")
+            if getattr(self, attribute)
+        }
+        if forbidden:
+            raise TypeError(
+                f"Tried to configure with forbidden properties: {', '.join(forbidden)}"
+            )
 
         self.host, self.host_owner, self.repo_name = get_repository_info(self.path)
 
@@ -88,7 +98,7 @@ class BranchInfo:
     author: str
     age: int
     is_old: bool
-    pull_request: githost.PullRequestInfo = None
+    pull_request: githost.PullRequestInfo | None = None
 
     @property
     def must_warn(self):

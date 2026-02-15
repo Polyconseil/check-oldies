@@ -30,7 +30,7 @@ def replace_dashes(options):
 
 
 def read_from_configuration_file(path, tool_name):
-    if not compat.load_toml:  # pragma: no cover
+    if compat.load_toml is None:  # pragma: no cover
         sys.exit(
             'You must install with `pip install "check-oldies[toml]" '
             "to read TOML configuration files."

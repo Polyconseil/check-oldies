@@ -17,7 +17,7 @@
 # sys.path.insert(0, os.path.abspath('.'))
 
 
-import pkg_resources
+import importlib.metadata
 
 # -- Project information -----------------------------------------------------
 
@@ -28,7 +28,7 @@ author = "Polyconseil"
 # The short X.Y version
 version = ""
 # The full version, including alpha/beta/rc tags
-release = pkg_resources.get_distribution("check-oldies").version
+release = importlib.metadata.version("check-oldies")
 
 
 # -- General configuration ---------------------------------------------------

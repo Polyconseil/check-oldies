@@ -63,7 +63,7 @@ could be extended to work with other code hosting platforms.
 Requirements and installation
 =============================
 
-You must have Python 3.8 or later, and Git 2.19.0 or later.
+You must have Python 3.10 or later, and Git 2.19.0 or later.
 
 Install with ``pip``, preferably in a virtual environment:
 

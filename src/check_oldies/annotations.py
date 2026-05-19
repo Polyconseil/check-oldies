@@ -220,7 +220,7 @@ def get_known_future_tags(directory, annotation_regex, future_tag_regex, whiteli
     grep.extend([f":(exclude){glob}" for glob in whitelist])
     lines = commands.get_pipe_command_output(
         grep,
-        piped_to=f'sed --regexp-extended "s/.*?({future_tag_regex}).*?/\\1/g"',
+        piped_to=["sed", "--regexp-extended", f"s/.*?({future_tag_regex}).*?/\\1/g"],
         cwd=directory,
         valid_return_codes=(0, 1),  # 0 if there are matches, 1 otherwise
     )

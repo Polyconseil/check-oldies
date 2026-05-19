@@ -6,7 +6,7 @@
 - |backward-incompatible| Remove support of Git 2.18 and earlier
   version. You must now have Git 2.19 (or a more recent version).
 
-- |backward-incompatible| Remove support of Python 3.7.
+- |backward-incompatible| Remove support of Python 3.7, 3.8 and 3.9.
 
 - |backward-incompatible| The `toml` optional dependency has been
   removed. Trying to `pip install "check-oldies[toml]"` will result in

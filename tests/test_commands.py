@@ -31,8 +31,8 @@ class TestGetCommandOutput:
 
 def test_get_pipe_command_output():
     lines = commands.get_pipe_command_output(
-        ["head", "-n 4", "test_commands.py"],
-        piped_to="head -n 1",
+        ["/bin/head", "-n 4", "test_commands.py"],
+        piped_to=["/bin/head", "-n 1"],
         cwd=base.TEST_DIR_PATH,
     )
     expected = [

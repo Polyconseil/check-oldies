@@ -1,7 +1,7 @@
 1.0.0 (unreleased)
 ------------------
 
-- Add support of Python 3.12.
+- Add support of Python 3.12, 3.13 and 3.14.
 
 - |backward-incompatible| Remove support of Git 2.18 and earlier
   version. You must now have Git 2.19 (or a more recent version).

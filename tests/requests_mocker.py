@@ -3,7 +3,6 @@
 import collections
 import dataclasses
 import json as jsonlib
-import typing
 import unittest.mock
 import urllib.parse
 import urllib.request
@@ -29,7 +28,7 @@ def get_mock():
 @dataclasses.dataclass
 class Request:
     url: str
-    headers: typing.Dict[str, str]
+    headers: dict[str, str]
     data: bytes
     params: dict
 
@@ -49,7 +48,7 @@ class Call:
     response: Response
 
 
-class Mock():
+class Mock:
     """Intercept HTTP requests and mock their responses.
 
     An instance of ``Mock`` can be configured via its two methods:

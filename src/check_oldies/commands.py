@@ -9,8 +9,7 @@ def get_output(cmd_list, cwd, valid_return_codes=(0,)):
     res = subprocess.run(
         cmd_list,
         cwd=cwd,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
         check=False,
         encoding="utf-8",
     )

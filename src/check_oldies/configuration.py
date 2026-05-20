@@ -12,8 +12,7 @@ def is_git_directory(path):
     res = subprocess.run(
         ["git", "rev-parse"],
         cwd=path,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
         check=False,
     )
     return res.returncode == os.EX_OK

@@ -48,6 +48,7 @@ annotations = [
 ]
 whitelist = [
     ".pylintrc",
+    "CHANGES.rst",
     "README.rst",
     "docs/*.rst",
 ]

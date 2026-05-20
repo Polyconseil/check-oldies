@@ -1,3 +1,43 @@
+[project]
+name = "check-oldies"
+version = "1.0.0.dev0"
+requires-python = ">= 3.10"
+dependencies = [
+  'toml; python_version < "3.11"',
+]
+authors = [
+  { name = "Polyconseil", email = "opensource+check-oldies@polyconseil.fr" },
+]
+readme = "README.rst"
+description = "Warns about unattended branches and FIXME or TODO annotations"
+license = "BSD-3-Clause"
+license-files = ["LICENSE.txt"]
+keywords = ["fixme", "todo", "quality", "technical debt"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+]
+
+[project.urls]
+Homepage = "https://github.com/Polyconseil/check-oldies"
+Documentation = "https://check-oldies.readthedocs.io/en/latest/"
+Repository = "https://github.com/Polyconseil/check-oldies"
+Issues = "https://github.com/Polyconseil/check-oldies/issues"
+Changelog = "https://github.com/Polyconseil/check-oldies/blob/master/Changelog.rst"
+
+[project.scripts]
+check-branches = "check_oldies.check_branches:main"
+check-fixmes = "check_oldies.check_fixmes:main"
+check-future-tags = "check_oldies.check_future_tags:main"
+forget-me-not = "check_oldies.forget_me_not:main"
+
+
 [tool.check-fixmes]
 path = "."
 max-age = 180
@@ -9,7 +49,6 @@ annotations = [
 whitelist = [
     ".pylintrc",
     "README.rst",
-    "setup.cfg",
     "docs/*.rst",
 ]
 

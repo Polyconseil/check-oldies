@@ -64,10 +64,10 @@ works on Git repositories but could be extended to other version
 control systems. It integrates with GitHub and GitLab but can do without it, and
 could be extended to work with other code hosting platforms.
 
-**check-oldies** is written by `Polyconseil`_ and is licensed under the
-3-clause BSD license, a copy of which is included in the source.
-
-.. _Polyconseil: https://opensource.polyconseil.fr
+**check-oldies** has initially been written by folks at `Polycea
+(formerly known as Polyconseil) <https://www.polycea.fr>`_ and is
+licensed under the 3-clause BSD license, a copy of which is included
+in the source.
 
 
 .. toctree::

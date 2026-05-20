@@ -3,7 +3,7 @@ name = "check-oldies"
 version = "1.0.0.dev0"
 requires-python = ">= 3.10"
 dependencies = [
-  'toml; python_version < "3.11"',
+  'toml == 0.10.2; python_version < "3.11"',
 ]
 authors = [
   { name = "Polyconseil", email = "opensource+check-oldies@polyconseil.fr" },

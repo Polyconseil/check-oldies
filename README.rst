@@ -1,8 +1,7 @@
 **check-oldies** is a collection of programs that warn about old
 things in code:
 
-- **check-fixmes** warns about old FIXME or TODO annotations and
-  orphan FUTURE tags.
+- **check-fixmes** warns about old FIXME or TODO annotations.
 
   If we did not regularly check, we would forget about that FIXME note
   we wrote a few months ago. **check-fixmes** warns us about it. It is
@@ -10,13 +9,15 @@ things in code:
   not worth to fix, or because it is not relevant anymore), or
   postpone it.
 
-  FUTURE tags: We sometimes plan a broad modification that will span
-  multiple files. Instead of littering FIXME annotations everywhere,
-  we set a single FIXME annotation and a FUTURE-xxx tag on the same
-  line. Then, wherever we need to make a modification, we only
-  mention this FUTURE-xxx tag without any FIXME. If we ever remove the
-  FIXME but keep a FUTURE-xxx tag somewhere, it is a mistake and this
-  tool warns us.
+- **check-future-tags** warns about orphan FUTURE tags.
+
+  We sometimes plan a broad modification that will span multiple
+  files. Instead of littering FIXME annotations everywhere, we set a
+  single FIXME annotation and a FUTURE-xxx tag on the same line. Then,
+  wherever we need to make a modification, we only mention this
+  FUTURE-xxx tag without any FIXME. If we ever remove the FIXME but
+  keep a FUTURE-xxx tag somewhere, it is a mistake and this tool warns
+  us. (See `documentation <https://check-oldies.readthedocs.io/en/latest/check_future_tags.html>` for an example.)
 
 - **check-branches** warns about old branches, surprisingly.
 
@@ -24,7 +25,7 @@ things in code:
   repositories and sends warning e-mails to authors of soon-to-be-old
   annotations or branches.
 
-In other words: **check-fixmes** and **check-branches** can be run as
+In other words: **check-fixmes**, **check-branches** and **check-future-tags** can be run as
 part of the test suite of each project (by a continuous integration
 system such as Jenkins). They break builds when they detect old
 things.  On the other hand, **forget-me-not** can be run once a week

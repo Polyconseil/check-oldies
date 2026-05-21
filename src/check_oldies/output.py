@@ -77,7 +77,7 @@ def xunit_formatter(
     system_out = xml.etree.ElementTree.SubElement(case, "system-out")
     system_out.text = stdout
 
-    # FIXME (dbaty, 2024-03-28): this element is always empty and
+    # FIXME (dbaty, 2026-05-21): this element is always empty and
     # could be removed (because the schema says it's optional).
     system_err = xml.etree.ElementTree.SubElement(case, "system-err")
     system_err.text = ""

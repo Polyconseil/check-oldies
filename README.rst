@@ -57,8 +57,9 @@ Applicability
 
 **check-oldies** is written in Python but is language-agnostic. It
 works on Git repositories but could be extended to other version
-control systems. It integrates with GitHub but can do without it, and
-could be extended to work with other code hosting platforms.
+control systems. It integrates with GitHub and GitLab but can do
+without it, and could be extended to work with other code hosting
+platforms.
 
 
 Requirements and installation

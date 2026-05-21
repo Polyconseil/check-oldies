@@ -186,8 +186,6 @@ def get_annotations(config: Config):
         config.path, config.annotation_regex, config.whitelist
     ):
         filename, line_no, line_content = candidate.split(":", 2)
-        # FIXME (dbaty, 2024-03-28): it should be possible to apply
-        # the right regex (with boundaries) directly in git grep.
         if config.py_annotation_regex.search(line_content):
             annotations.append(Annotation(filename, int(line_no), line_content))
 

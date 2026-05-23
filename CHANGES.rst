@@ -1,4 +1,4 @@
-1.0.0 (unreleased)
+1.0.0 (2026-05-23)
 ------------------
 
 - Add support of Python 3.12, 3.13 and 3.14.

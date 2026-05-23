@@ -1,6 +1,6 @@
 [project]
 name = "check-oldies"
-version = "1.0.0.dev0"
+version = "1.0.0"
 requires-python = ">= 3.10"
 dependencies = [
   'toml == 0.10.2; python_version < "3.11"',

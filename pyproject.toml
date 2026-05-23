@@ -29,7 +29,7 @@ Homepage = "https://github.com/Polyconseil/check-oldies"
 Documentation = "https://check-oldies.readthedocs.io/en/latest/"
 Repository = "https://github.com/Polyconseil/check-oldies"
 Issues = "https://github.com/Polyconseil/check-oldies/issues"
-Changelog = "https://github.com/Polyconseil/check-oldies/blob/master/Changelog.rst"
+Changelog = "https://github.com/Polyconseil/check-oldies/blob/master/CHANGES.rst"
 
 [project.scripts]
 check-branches = "check_oldies.check_branches:main"

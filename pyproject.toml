@@ -128,3 +128,8 @@ disable = [
     "unused-argument",
     "wrong-import-order",  # we `isort` with a custom config
 ]
+
+
+[tool.zest-releaser]
+# Do not let zest.releaser upload to PyPI. It's done by a GitHub CI job.
+upload-pypi = false

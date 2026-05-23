@@ -16,4 +16,4 @@ pylint_strict_informational
 twine
 
 # Release
-zest.releaser[recommended]
+zest.releaser

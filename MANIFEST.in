@@ -12,5 +12,6 @@ exclude .pylintrc
 exclude .readthedocs.yaml
 exclude Makefile
 exclude pyproject.toml
+exclude RELEASE.txt
 exclude requirements_dev.txt
 exclude stubs/toml/__init__.pyi

@@ -33,3 +33,5 @@ quality:
 clean:
 	rm -rf .coverage
 	find . -name "*.pyc" | xargs rm -f
+	rm -rf dist
+	rm -rf src/check_oldies.egg-info/

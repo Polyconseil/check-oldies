@@ -1,11 +1,15 @@
 1.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix project metadata and thus the build, which makes this version
+  1.0.1 installable (contrary to version 1.0.0).
 
 
 1.0.0 (2026-05-23)
 ------------------
+
+**Brown bag release:** this version could not be installed. See fix in
+version 1.0.1.
 
 - Add support of Python 3.12, 3.13 and 3.14.
 
